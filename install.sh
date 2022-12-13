@@ -60,7 +60,7 @@ while true; do
     esac
 done
 
-echo -e "Validate Installed Packages..."
+echo -e "Validate Installed Packages...\n"
 apt list --installed | grep -i nxlog
 apt list --installed | grep -i forti
 apt list --installed | grep -i ppp
