@@ -15,6 +15,7 @@ then
    apt install ppp expect -y
    echo "PPP Package was installed"
 else
+fi
    read -p "Do you want to install ssl vpn package y/n? " yn
    if [ $yn == "Y" || $yn == "y"  ]
    then
@@ -22,6 +23,7 @@ else
       apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
       echo -e "SSL VPN Package was installed\n"
    else
+   fi
       read -p "Do you want to install nxlog -ce package y/n? " yn
       if [ $yn == "Y" || $yn == "y"  ]
       then
@@ -32,6 +34,5 @@ else
          echo "Copy NXLog Configuration Complete.....!"
       else
          echo "Nothing Change!!"     
-fi
-        
 
+      fi  
