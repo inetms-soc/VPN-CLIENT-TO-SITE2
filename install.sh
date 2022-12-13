@@ -2,7 +2,7 @@
 
 #Define System Variable
 mkdir /home/socadmin
-export soc_path = "/home/socadmin"
+export soc_path ="/home/socadmin"
 cp -a ./VPN_Script/*.sh $soc_path
 
 
@@ -18,10 +18,13 @@ while true; do
         apt install ppp expect -y
         echo "PPP Package was installed"
         break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
+        # if type no = exit
+        [Nn]* ) 
+        exit;;
+        * ) 
+        echo "Please answer yes or no.";;
     esac
-done
+
 echo -e "Installing Forti SSL-VPN\n"
 apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
 echo "Install Forti SSL-VPN Complete.....!"
