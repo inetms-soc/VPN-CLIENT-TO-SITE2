@@ -2,7 +2,7 @@
 
 #Define System Variable
 mkdir /home/socadmin
-export soc_path ="/home/socadmin"
+export soc_path="/home/socadmin"
 cp -a ./VPN_Script/*.sh $soc_path
 
 

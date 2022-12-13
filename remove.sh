@@ -1,12 +1,16 @@
 #!/bin/bash
-echo "Disconnect VPN Connection"
+echo -e "Disconnect VPN Connection\n"
 pkill ppp
-echo "Remove PPP Interface"
-apt remove --purge ppp
-echo "Remove Forticlient VPN Package"
-apt remove --purge forticlientsslvpn
-echo "Stop NXLog Service"
-systemctl stop nxlog
-echo "Remove NXLog-CE Package"
-apt remove --purge nxlog-ce
-echo "Terminate Service Done...!"
+echo -e "Remove PPP Interface\n"
+apt remove --purge ppp -y
+echo -e "Remove Forticlient VPN Package\n"
+apt remove --purge forticlient-sslvpn -y
+echo -e "Stop NXLog Service\n"
+systemctl stop nxlog -y
+echo -e "Remove NXLog-CE Package\n"
+apt remove --purge nxlog-ce -y
+echo -e "Validate Installed Packages"
+apt list --installed | grep -i nxlog
+apt list --installed | grep -i forti
+apt list --installed | grep -i ppp
+echo -e "Terminate Service Done...!\n"
