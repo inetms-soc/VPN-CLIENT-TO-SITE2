@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #Define System Variable
 mkdir /home/socadmin
 export soc_path="/home/socadmin"
