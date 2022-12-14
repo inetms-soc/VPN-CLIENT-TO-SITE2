@@ -14,9 +14,11 @@ while true; do
         echo -e "Installing PPP Package\n"
         apt install ppp expect -y
         echo "PPP Package was installed"
+        V1="PPP Package"
         break;;
         # if type no = exit
         [Nn]* )
+        V1=""
         break;;
         * )
         echo "Please answer yes or no.";;
@@ -31,9 +33,11 @@ while true; do
         echo -e "Installing Forti SSL-VPN\n"
         apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
         echo "Install Forti SSL-VPN Complete.....!"
+        V2="Forti SSL-VPN Package"
         break;;
         # if type no = exit
         [Nn]* )
+        V2=""
         break;;
         * )
         echo "Please answer yes or no.";;
@@ -50,9 +54,11 @@ while true; do
         echo "Install NXLog-CE Complete.....!"
         cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
         echo "Copy NXLog Configuration Complete.....!"
+        V3="NXLog-CE Package"
         break;;
         # if type no = exit
         [Nn]* )
+        V3=""
         break;;
         * )
         echo "Please answer yes or no.";;
@@ -64,4 +70,4 @@ apt list --installed | grep -i nxlog
 apt list --installed | grep -i forti
 apt list --installed | grep -i ppp
 
-echo "Installation Complete"
+echo -e "Installation following package complete\n$V1\n$V2\n$V3"
