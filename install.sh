@@ -11,9 +11,9 @@ while true; do
     read -p "Do you want to install ppp expect package y/n? " yn
     case $yn in
         [Yy]* )
-        echo -e "Installing PPP Package\n"
+        echo "Installing PPP Package....."
         apt install ppp expect -y
-        echo "PPP Package was installed"
+        echo -e "PPP Expect was installed\n"
         V1="PPP Package"
         break;;
         # if type no = exit
@@ -30,9 +30,9 @@ while true; do
     read -p "Do you want to install SSL VPN package y/n? " yn
     case $yn in
         [Yy]* )
-        echo -e "Installing Forti SSL-VPN\n"
+        echo "Installing Forti SSL-VPN Package....."
         apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
-        echo "Install Forti SSL-VPN Complete.....!"
+        echo -e "Forti SSL-VPN was installed\n"
         V2="Forti SSL-VPN Package"
         break;;
         # if type no = exit
@@ -49,11 +49,11 @@ while true; do
     read -p "Do you want to install NXLog-CE package y/n? " yn
     case $yn in
         [Yy]* )
-        echo -e "Installing NXLog-CE Package\n"
+        echo "Installing NXLog-CE Package"
         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
-        echo "Install NXLog-CE Complete.....!"
+        echo "NXLog-CE was installed"
         cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
-        echo "Copy NXLog Configuration Complete.....!"
+        echo -e "Copy NXLog Configuration Done.....!\n"
         V3="NXLog-CE Package"
         break;;
         # if type no = exit
@@ -65,7 +65,7 @@ while true; do
     esac
 done
 
-echo -e "Validate Installed Packages...\n"
+echo -e "Validate Installed Packages..."
 apt list --installed | grep -i nxlog
 apt list --installed | grep -i forti
 apt list --installed | grep -i ppp
