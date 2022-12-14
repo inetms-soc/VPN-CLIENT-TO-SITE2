@@ -1,4 +1,5 @@
 #!/bin/bash
+unset soc_path
 echo -e "Disconnect VPN Connection\n"
 pkill ppp
 echo -e "Remove PPP Interface\n"
@@ -13,4 +14,4 @@ echo -e "Validate Installed Packages"
 apt list --installed | grep -i nxlog
 apt list --installed | grep -i forti
 apt list --installed | grep -i ppp
-echo -e "Terminate Service Done...!\n"
+echo -e "Terminate Service Done...!"

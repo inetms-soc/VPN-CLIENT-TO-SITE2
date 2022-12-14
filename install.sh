@@ -1,8 +1,8 @@
 #!/bin/bash
 #Define System Variable
 mkdir /home/socadmin
+unset soc_path
 export soc_path="/home/socadmin"
-cp -a ./VPN_Script/*.sh $soc_path
 
 echo "VPN Client To Site begin install..."
 sleep 1.2
@@ -32,7 +32,9 @@ while true; do
         [Yy]* )
         echo "Installing Forti SSL-VPN Package....."
         apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
-        echo -e "Forti SSL-VPN was installed\n"
+        echo "Forti SSL-VPN was installed"
+        cp -a ./VPN_Script/*.sh $soc_path
+        echo -e "Copy vpn configuration to this path: $soc_path complete!\n"
         V2="Forti SSL-VPN Package"
         break;;
         # if type no = exit
