@@ -51,13 +51,29 @@ while true; do
     read -p "Do you want to install NXLog-CE package y/n? " yn
     case $yn in
         [Yy]* )
-        echo "Installing NXLog-CE Package"
-        apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
-        echo "NXLog-CE was installed"
-        cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
-        echo -e "Copy NXLog Configuration Done.....!\n"
-        V3="NXLog-CE Package"
-        break;;
+        while true; do
+            read -p "Which type of OS 1.Ubuntu, 2.CentOS ? " OS
+            case $OS in
+                [1]* )
+                echo "You Select Ubuntu OS"
+                break;;
+                # if type no = exit
+                [2]* )
+                echo "You Select CentOS OS"
+                V3="x"
+                break;;
+                * )
+                echo "Please answer 1 or 2";;
+            esac
+        done
+
+        #echo "Installing NXLog-CE Package"
+        #apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
+        #echo "NXLog-CE was installed"
+        #cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
+        #echo -e "Copy NXLog Configuration Done.....!\n"
+        #V3="NXLog-CE Package"
+        #break;;
         # if type no = exit
         [Nn]* )
         V3=""
