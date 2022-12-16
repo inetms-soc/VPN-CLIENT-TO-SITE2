@@ -9,7 +9,7 @@ function RestartNXLogService {
 
 
 
-
+#Main Function
 function Install_Forti_SSL_VPN_Package {
     clear
     while true; do
