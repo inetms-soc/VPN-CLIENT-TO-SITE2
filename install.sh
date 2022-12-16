@@ -4,9 +4,8 @@ mkdir /home/socadmin
 unset soc_path
 export soc_path="/home/socadmin"
 
-echo "VPN Client To Site begin install..."
+echo "VPN Client To Site Begin Install..."
 sleep 1.2
-#echo -e "Installing PPP Package\n"
 while true; do
     read -p "Do you want to install ppp expect package y/n? " yn
     case $yn in
