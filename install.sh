@@ -66,7 +66,7 @@ while true; do
                 echo "Please answer 1 or 2";;
             esac
         done
-
+        break;;
         #echo "Installing NXLog-CE Package"
         #apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
         #echo "NXLog-CE was installed"
