@@ -7,8 +7,6 @@ function RestartNXLogService {
     systemctl status nxlog
 }
 
-
-
 #Main Function
 function Install_Forti_SSL_VPN_Package {
     clear
@@ -48,7 +46,6 @@ function Install_Forti_SSL_VPN_Package {
     done
     
 }
-
 function Install_NXLog_CE_Package {
     clear
     while true; do
@@ -67,26 +64,26 @@ function Install_NXLog_CE_Package {
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
-                                        echo -e "\n/t***You Select 1.Ubuntu16.04***"
+                                        echo -e "\n\t***You Select 1.Ubuntu16.04***"
                                         sleep 1
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu16_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu16 was installed"
                                         sleep 1
                                     break;;
                                     [2] )
-                                        echo -e "\n/t***You Select 1.Ubuntu18.04***"
+                                        echo -e "\n\t***You Select 1.Ubuntu18.04***"
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu18 was installed"
                                         sleep 1
                                     break;;
                                     [3] )
-                                        echo -e "\n/t***You Select 1.Ubuntu20.04***"
+                                        echo -e "\n\t***You Select 1.Ubuntu20.04***"
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu20_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu20 was installed"
                                         sleep 1
                                     break;;
                                     [4] )
-                                        echo -e "\n/t***You Select 1.Ubuntu22.04***"
+                                        echo -e "\n\t***You Select 1.Ubuntu22.04***"
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu22_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu22 was installed"
                                         sleep 1
@@ -189,7 +186,6 @@ function Install_NXLog_CE_Package {
         esac
     done
 }
-
 function Check_Installed_Package {
     clear
     echo -e "\nValidate Installed Packages...\n"
@@ -197,7 +193,6 @@ function Check_Installed_Package {
     apt list --installed | grep -i forti
     apt list --installed | grep -i ppp
 }
-
 function Terminate_SOC_Service {
     clear
     while true; do
