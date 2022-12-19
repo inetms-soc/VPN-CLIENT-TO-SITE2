@@ -2,6 +2,7 @@
 
 #Sub Function in Main Function
 function System_Info {
+    clear
     echo -e "Systeminfo Gethering....\n"
     # Get the operating system type
     os_type=$(lsb_release -i | awk '{print $3}')
@@ -10,14 +11,60 @@ function System_Info {
     # Get Hostname
     hostname=$(hostname)
     # Get Private IP and Public IP Address
-    private_ip=$(ip addr show |grep "ens*" | grep "inet " | awk '{print $2}' | cut -d/ -f1)
+    private_ip=$(ip addr show |grep -E 'ens|wlp|eth' | grep "inet " | awk '{print $2}' | cut -d/ -f1)
+    public_ip=$(curl -s ipinfo.io/ip)
     
     # Print the operating system type and version to the console
     echo -e "Operating system type: $os_type \nVersion: $version"
     echo -e "Hostname: $hostname"
-
+    echo -e "Private IP: $private_ip\nPublic IP: $public_ip"
 }
 
+function Connection_Test {
+    clear
+    echo -e "Connection Testing....\n"
+    
+    #!/bin/bash
+
+    # Test the connection to google.com
+
+    #!/bin/bash
+
+# Set the target hostname or IP address
+    target=logrelay1.local
+
+    # Set the target port
+    port=443
+
+    # Test the TCP port
+    echo "Testing TCP port $port on $target..."
+    if nc -z -w 1 $target $port; then
+        echo "TCP port $port is open"
+    else
+        echo "TCP port $port is closed"
+    fi
+
+    # Test the UDP port
+    echo "Testing UDP port $port on $target..."
+    if nc -zu -w 1 $target $port; then
+        echo "UDP port $port is open"
+    else
+        echo "UDP port $port is closed"
+    fi
+
+
+    #!/bin/bash
+
+    # Test the connection to google.com
+    echo "Testing connection to google.com..."
+    ping -c 1 google.com &> /dev/null && echo "Connection to google.com successful" || echo "Connection to google.com failed"
+
+    # Test the connection to facebook
+    echo "Testing connection to facebook..."
+    ping -c 1 google.com &> /dev/null && echo "Connection to google.com successful" || echo "Connection to facebook failed"
+
+
+}
 
 
 function RestartNXLogService {
@@ -278,6 +325,7 @@ function menu {
     echo -e "\t3. Install NXLog CE Package"
     echo -e "\t4. Check Installed Package on Device"
     echo -e "\t5. Terminate SOC Service"
+    echo -e "\t6. Connection Test"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     read -p "" option
@@ -305,7 +353,10 @@ do
         
         5)
         Terminate_SOC_Service ;;
-        
+
+        6)
+        Connection_Test ;;
+    
         *)
         clear
         echo "Sorry, Please Select Number[1-5]" ;;
