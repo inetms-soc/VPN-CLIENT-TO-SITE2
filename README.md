@@ -5,7 +5,7 @@ git clone https://github.com/inetms-soc/VPN-CLIENT-TO-SITE.git
 
 Credentials
 Email: csoc_inetms@outlook.com
-User:inetms-soc
-Private Key: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
+User: inetms-soc
+Private Key: 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
 
 Authors: James Supagit
