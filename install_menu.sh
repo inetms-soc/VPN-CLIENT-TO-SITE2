@@ -1,6 +1,25 @@
 #!/bin/bash
 
 #Sub Function in Main Function
+function System_Info {
+    echo -e "Systeminfo Gethering....\n"
+    # Get the operating system type
+    os_type=$(lsb_release -i | awk '{print $3}')
+    # Get the version of Ubuntu
+    version=$(lsb_release -r | awk '{print $2}')
+    # Get Hostname
+    hostname=$(hostname)
+    # Get Private IP and Public IP Address
+    private_ip=$(ip addr show |grep "ens*" | grep "inet " | awk '{print $2}' | cut -d/ -f1)
+    
+    # Print the operating system type and version to the console
+    echo -e "Operating system type: $os_type \nVersion: $version"
+    echo -e "Hostname: $hostname"
+
+}
+
+
+
 function RestartNXLogService {
     echo "service is restarting"
     systemctl restart nxlog
@@ -52,6 +71,7 @@ function Install_Forti_SSL_VPN_Package {
     done
     
 }
+
 function Install_NXLog_CE_Package {
     clear
     while true; do
@@ -253,14 +273,15 @@ function menu {
     clear
     echo
     echo -e "\t\t\tInstallation Menu\n"
-    echo -e "\t1. Install Forti SSL VPN Package"
-    echo -e "\t2. Install NXLog CE Package"
-    echo -e "\t3. Check Installed Package on Device"
-    echo -e "\t4. Terminate SOC Service"
+    echo -e "\t1. System Information"
+    echo -e "\t2. Install Forti SSL VPN Package"
+    echo -e "\t3. Install NXLog CE Package"
+    echo -e "\t4. Check Installed Package on Device"
+    echo -e "\t5. Terminate SOC Service"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     read -p "" option
-    #read -n 1 option
+    #read -n 1 option | not enter to prompt
 }
 
 while [ 1 ]
@@ -271,20 +292,23 @@ do
         clear
         break ;;
         1)
+        System_Info ;;
+
+        2)
         Install_Forti_SSL_VPN_Package ;;
         
-        2)
+        3)
         Install_NXLog_CE_Package ;;
         
-        3)
+        4)
         Check_Installed_Package ;;
         
-        4)
+        5)
         Terminate_SOC_Service ;;
         
         *)
         clear
-        echo "Sorry, wrong selection";;
+        echo "Sorry, Please Select Number[1-5]" ;;
     esac
     echo -en "\n\n\t\t\tHit any key to continue"
     read -n 1 line
