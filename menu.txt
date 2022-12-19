@@ -1,6 +1,0 @@
-echo "Welcome to Installation VPN Client To Site"
-echo "Menu:"
-echo "1. Install Forti SSL VPN Package"
-echo "2. Install NXLog CE Package"
-echo "3. Check Installed Package on Device"
-echo "4. Terminate SOC Service"
