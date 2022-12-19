@@ -11,13 +11,16 @@ function RestartNXLogService {
 function Install_Forti_SSL_VPN_Package {
     clear
     while true; do
-        echo -e "\n"
+        #echo -e "\n"
         read -p "1.1) Do you want to install ppp expect package y/n? " yn
+        clear
         case $yn in
             [Yy]* )
                 echo "Installing PPP Package....."
                 apt install ppp expect -y
                 echo -e "\n\t******PPP Expect was installed******\n"
+                sleep 1.5
+                clear
             break;;
             # if type no = exit
             [Nn]* )
@@ -28,6 +31,7 @@ function Install_Forti_SSL_VPN_Package {
     done
     while true; do
         read -p "1.2) Do you want to install Forti SSL VPN Package y/n? " yn
+        clear
         case $yn in
             [Yy]* )
                 echo "Installing Forti SSL-VPN Package....."
@@ -35,6 +39,8 @@ function Install_Forti_SSL_VPN_Package {
                 echo -e "\n\t******Forti SSL-VPN was installed******"
                 cp -a ./VPN_Script/*.sh $soc_path
                 echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
+                sleep 1.5
+                clear
                 #V2="Forti SSL-VPN Package"
             break;;
             # if type no = exit
@@ -49,8 +55,9 @@ function Install_Forti_SSL_VPN_Package {
 function Install_NXLog_CE_Package {
     clear
     while true; do
-        echo -e "\n"
+        #echo -e "\n"
         read -p "2.1) Do you want to install NXLog-CE package y/n? " yn
+        clear
         case $yn in
             [Yy]* )
                 while true; do
@@ -58,35 +65,48 @@ function Install_NXLog_CE_Package {
                     read -p "Select: " OS
                     case $OS in
                         [1] )
-                            echo -e "\n***You Select [1] Ubuntu OS***"
+                            echo -e ">>> You Select[1] = Ubuntu OS"
+                            sleep 1.5
+                            clear
                             while true; do
-                                echo -e "\t\t\tWhich type of OS Version\n\t   Select[1] = Ubuntu16.04\n\t   Select[2] = Ubuntu18.04\n\t   Select[3] = Ubuntu20.04\n\t   Select[4] =Ubuntu22.04"
+                                echo -e "\t\t\tWhich type of OS Version\n\t   Select[1] = Ubuntu16.04\n\t   Select[2] = Ubuntu18.04\n\t   Select[3] = Ubuntu20.04\n\t   Select[4] = Ubuntu22.04"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
                                         echo -e "\n\t***You Select 1.Ubuntu16.04***"
-                                        sleep 1
+                                        sleep 1.5
+                                        clear
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu16_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu16 was installed"
                                         sleep 1
+                                        clear
                                     break;;
                                     [2] )
                                         echo -e "\n\t***You Select 1.Ubuntu18.04***"
+                                        sleep 1.5
+                                        clear
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu18 was installed"
                                         sleep 1
+                                        clear
                                     break;;
                                     [3] )
                                         echo -e "\n\t***You Select 1.Ubuntu20.04***"
+                                        sleep 1.5
+                                        clear
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu20_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu20 was installed"
                                         sleep 1
+                                        clear
                                     break;;
                                     [4] )
                                         echo -e "\n\t***You Select 1.Ubuntu22.04***"
+                                        sleep 1.5
+                                        clear
                                         apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu22_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu22 was installed"
                                         sleep 1
+                                        clear
                                     break;;
                                     * )
                                     echo "Please Select [1-4]";;
@@ -239,7 +259,8 @@ function menu {
     echo -e "\t4. Terminate SOC Service"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
-    read -n 1 option
+    read -p "" option
+    #read -n 1 option
 }
 
 while [ 1 ]
@@ -247,6 +268,7 @@ do
     menu
     case $option in
         0)
+        clear
         break ;;
         1)
         Install_Forti_SSL_VPN_Package ;;
