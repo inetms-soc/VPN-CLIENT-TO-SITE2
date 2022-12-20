@@ -22,19 +22,32 @@ function System_Info {
 
 function Connection_Test {
     clear
-    echo -e "Connection Testing....\n"
-    
-    #!/bin/bash
+    while true; do
+        echo -e "\n\t\t\t***Please Selelect Destination Host***\n\tSelect[1] = logrelay1.local\n\tSelect[2] = logrelay2.local\n"
+        read -p "Select: " destination
+        case $destination in
+            [1])
+                destination="logrelay1.local" 
+                echo -e "Connection Testing to $destination.....\n"
+            break;;
 
-    # Test the connection to google.com
+            [2])
+                destination="logrelay2.local" 
+                echo -e "Connection Testing to $destination.....\n"
+            break;;
 
-    #!/bin/bash
+            *)
+            echo -e "\t***Please Confirm Your Selection type [1 or 2]***"
+            sleep 2.2
+            clear;;
+            
+        esac
+    done
 
-# Set the target hostname or IP address
-    target=logrelay1.local
-
-    # Set the target port
-    port=443
+    echo -e "\n\t\t\t***Please Input Destination Port***"
+    read -p "Select Port: " d_port
+    target=$destination
+    port=$d_port
 
     # Test the TCP port
     echo "Testing TCP port $port on $target..."
@@ -52,20 +65,17 @@ function Connection_Test {
         echo "UDP port $port is closed"
     fi
 
-
     #!/bin/bash
-
     # Test the connection to google.com
-    echo "Testing connection to google.com..."
-    ping -c 1 google.com &> /dev/null && echo "Connection to google.com successful" || echo "Connection to google.com failed"
+    echo "Testing connection to logrelay1.local..."
+    ping -c 3 logrelay1.local &> /dev/null && echo "Connection to logrelay1.local successful" || echo "Connection to logrelay1.local failed"
 
     # Test the connection to facebook
-    echo "Testing connection to facebook..."
-    ping -c 1 google.com &> /dev/null && echo "Connection to google.com successful" || echo "Connection to facebook failed"
+    echo "Testing connection to logrelay2.local..."
+    ping -c 3 logrelay2.local &> /dev/null && echo "Connection to logrelay2.local successful" || echo "Connection to logrelay2.local failed"
 
 
 }
-
 
 function RestartNXLogService {
     echo "service is restarting"
@@ -78,7 +88,7 @@ function Install_Forti_SSL_VPN_Package {
     clear
     while true; do
         #echo -e "\n"
-        read -p "1.1) Do you want to install ppp expect package y/n? " yn
+        read -p "1.1) Do you want to install PPP Expect package y/n? " yn
         clear
         case $yn in
             [Yy]* )
@@ -103,6 +113,7 @@ function Install_Forti_SSL_VPN_Package {
                 echo "Installing Forti SSL-VPN Package....."
                 apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
                 echo -e "\n\t******Forti SSL-VPN was installed******"
+                soc_path="/home/socadmin"
                 cp -a ./VPN_Script/*.sh $soc_path
                 echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
                 sleep 1.5
