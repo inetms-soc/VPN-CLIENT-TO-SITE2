@@ -3,7 +3,7 @@
 #Sub Function in Main Function
 function System_Info {
     clear
-    echo -e "Systeminfo Gethering....\n"
+    echo -e "\t\t\t*** Systeminfo Gathering ***\n"
     # Get the operating system type
     os_type=$(lsb_release -i | awk '{print $3}')
     # Get the version of Ubuntu
@@ -15,70 +15,79 @@ function System_Info {
     public_ip=$(curl -s ipinfo.io/ip)
     
     # Print the operating system type and version to the console
-    echo -e "Operating system type: $os_type \nVersion: $version"
-    echo -e "Hostname: $hostname"
-    echo -e "Private IP: $private_ip\nPublic IP: $public_ip"
+    echo -e "\t\t\tOperating System Type: $os_type \n\t\t\tVersion: $version"
+    echo -e "\t\t\tHostname: $hostname"
+    echo -e "\t\t\tPrivate IP: $private_ip\n\t\t\tPublic IP: $public_ip"
+    echo -en "\n\n\t\t\tHit any key to continue"
+    read -n 1 line
 }
 
 function Connection_Test {
+    function CheckConncection {
+        clear
+        echo -e "\n\t\t\t***Please Input Destination Port***"
+        read -p "Select Port: " d_port
+        target=$destination
+        port=$d_port
+        clear
+        # Test the TCP port
+        echo "Connection to: $target TCP Port: $port"
+        if nc -z -w 1 $target $port; then
+            status1="TCP port $port is open"
+        else
+            status1="TCP port $port is closed"
+        fi
+
+        # Test the UDP port
+        echo "Connection to: $target UDP Port: $port"
+        if nc -zu -w 1 $target $port; then
+            status2="UDP port $port is open"
+        else
+            status2="UDP port $port is closed"
+        fi
+
+        #echo "Testing connection to $destination..."
+        echo -e "\n$status1\n$status2\n"
+        ping -c 3 $destination &> /dev/null && echo "Ping Connection to $destination successful" || echo "Ping Connection to $destination failed"
+        echo -en "\n\n\t\t\tHit any key to continue"
+        read -n 1 line
+        }
+        
     clear
     while true; do
-        echo -e "\n\t\t\t***Please Selelect Destination Host***\n\tSelect[1] = logrelay1.local\n\tSelect[2] = logrelay2.local\n"
+        echo -e "\n\t\t\t***Please Selelect Destination Host***\n\t\tSelect[1] = logrelay1.local\n\t\tSelect[2] = logrelay2.local\n\t\tSelect[3] = Return to Main menu\n"
         read -p "Select: " destination
         case $destination in
             [1])
+                clear
                 destination="logrelay1.local" 
-                echo -e "Connection Testing to $destination.....\n"
+                echo -e "Connection Testing to: $destination"
+                CheckConncection
             break;;
 
             [2])
+                clear
                 destination="logrelay2.local" 
-                echo -e "Connection Testing to $destination.....\n"
+                echo -e "Connection Testing to: $destination"
+                CheckConncection
             break;;
 
+            [3])
+                clear
+            break;;
+        
             *)
-            echo -e "\t***Please Confirm Your Selection type [1 or 2]***"
+            clear
+            echo -e "\n\t\t***Please Confirm Your Selection type [1 or 2]***"
             sleep 2.2
             clear;;
             
         esac
     done
-
-    echo -e "\n\t\t\t***Please Input Destination Port***"
-    read -p "Select Port: " d_port
-    target=$destination
-    port=$d_port
-
-    # Test the TCP port
-    echo "Testing TCP port $port on $target..."
-    if nc -z -w 1 $target $port; then
-        echo "TCP port $port is open"
-    else
-        echo "TCP port $port is closed"
-    fi
-
-    # Test the UDP port
-    echo "Testing UDP port $port on $target..."
-    if nc -zu -w 1 $target $port; then
-        echo "UDP port $port is open"
-    else
-        echo "UDP port $port is closed"
-    fi
-
-    #!/bin/bash
-    # Test the connection to google.com
-    echo "Testing connection to logrelay1.local..."
-    ping -c 3 logrelay1.local &> /dev/null && echo "Connection to logrelay1.local successful" || echo "Connection to logrelay1.local failed"
-
-    # Test the connection to facebook
-    echo "Testing connection to logrelay2.local..."
-    ping -c 3 logrelay2.local &> /dev/null && echo "Connection to logrelay2.local successful" || echo "Connection to logrelay2.local failed"
-
-
 }
 
 function RestartNXLogService {
-    echo "service is restarting"
+    echo "service is restarting..."
     systemctl restart nxlog
     systemctl status nxlog
 }
@@ -118,11 +127,13 @@ function Install_Forti_SSL_VPN_Package {
                 echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
                 sleep 1.5
                 clear
+                install_menu
                 #V2="Forti SSL-VPN Package"
             break;;
             # if type no = exit
             [Nn]* )
-            break;;
+            install_menu;;
+            #break;;
             * )
             echo "Please answer yes or no.";;
         esac
@@ -187,11 +198,14 @@ function Install_NXLog_CE_Package {
                                         clear
                                     break;;
                                     * )
-                                    echo "Please Select [1-4]";;
+                                    echo "Please Select [1-4]"
+                                    sleep 2
+                                    clear;;
                                 esac
                             done
                             while true; do
-                                read -p "2.2) Please Select Configuration 1. NXLog Server  2. NXLog Client ? " VERSION
+                                echo -e "\t\t2.2) Please Select Configuration\n\tSelect[1] = NXLog Server\n\tSelect[2] = NXLog Client"
+                                read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
                                         echo "You Select 1.NXLog Server Config"
@@ -208,7 +222,9 @@ function Install_NXLog_CE_Package {
                                         sleep 1
                                     break;;
                                     * )
-                                    echo "Please Select [1-2]";;
+                                    echo "Please Select [1-2]"
+                                    sleep 2
+                                    clear;;
                                 esac
                             done
                         break;;
@@ -244,7 +260,10 @@ function Install_NXLog_CE_Package {
                                         sleep 1
                                     break;;
                                     * )
-                                    echo "Please Select [1-4]";;
+                                    echo "Please Select [1-4]"
+                                    sleep 2
+                                    clear;;
+
                                 esac
                             done
                             while true; do
@@ -255,17 +274,21 @@ function Install_NXLog_CE_Package {
                                         cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog.conf
                                         echo "Copy NXLog_Server.conf to /etc/nxlog complete....."
                                         RestartNXLogService
-                                        sleep 1
+                                        echo -en "\n\n\t\t\tHit any key to continue"
+                                        read -n 1 line
                                     break;;
                                     [2] )
                                         echo "You Select 2.NXLog Client Config"
                                         cp -a ./NXLog_Config/nxlog_client.conf /etc/nxlog.conf
                                         echo "Copy NXLog_Client.conf to /etc/nxlog complete"
                                         RestartNXLogService
-                                        sleep 1
+                                        echo -en "\n\n\t\t\tHit any key to continue"
+                                        read -n 1 line                                       
                                     break;;
                                     * )
-                                    echo "Please Select [1-2]";;
+                                    echo "Please Select [1-2]"
+                                    sleep 2 
+                                    clear;;
                                 esac
                             done
                         break;;
@@ -326,21 +349,51 @@ function Terminate_SOC_Service {
     
     
 }
-
+# Main Menu
 function menu {
     clear
     echo
     echo -e "\t\t\tInstallation Menu\n"
     echo -e "\t1. System Information"
-    echo -e "\t2. Install Forti SSL VPN Package"
-    echo -e "\t3. Install NXLog CE Package"
+    echo -e "\t2. Network Connection Test"
+    echo -e "\t3. Installation Menu"
     echo -e "\t4. Check Installed Package on Device"
     echo -e "\t5. Terminate SOC Service"
-    echo -e "\t6. Connection Test"
     echo -e "\t0. Exit Menu\n\n"
     echo -en "\t\tEnter an Option: "
     read -p "" option
     #read -n 1 option | not enter to prompt
+}
+
+# Sub Menu
+function install_menu {
+    clear
+    while true; do
+        echo -e "\t\t\tPlease Select Installation Menu\n"
+        echo -e "\t\t1. Install Forti SSL VPN Package"
+        echo -e "\t\t2. Install NXLog CE Package"
+        echo -e "\t\t3. Exit to  Main Menu\n"
+        echo -en "Enter an Option: "
+        read -p "" option2
+        clear
+        case $option2 in
+            [1] )
+                Install_Forti_SSL_VPN_Package
+            break;;
+            [2] )
+                Install_NXLog_CE_Package
+            break;;
+            [3] )
+            break;;
+            * )
+            echo -e "\t\t**********************************************"
+            echo -e "\t\t***Please Confirm Your Selection type [1-3]***"
+            echo -e "\t\t**********************************************"
+            sleep 1.5
+            clear;;
+        esac
+    done    
+
 }
 
 while [ 1 ]
@@ -354,25 +407,24 @@ do
         System_Info ;;
 
         2)
-        Install_Forti_SSL_VPN_Package ;;
-        
+        Connection_Test ;;
+
         3)
-        Install_NXLog_CE_Package ;;
-        
+        install_menu;;
+ 
         4)
         Check_Installed_Package ;;
         
         5)
         Terminate_SOC_Service ;;
 
-        6)
-        Connection_Test ;;
-    
         *)
         clear
-        echo "Sorry, Please Select Number[1-5]" ;;
+        echo -e "\t\t**************************************"
+        echo -e "\t\t***Sorry, Please Select Number[1-5]***"
+        echo -e "\t\t**************************************"
     esac
-    echo -en "\n\n\t\t\tHit any key to continue"
-    read -n 1 line
+    #echo -en "\n\n\t\t\tHit any key to continue"
+    #read -n 1 line
 done
 clear
