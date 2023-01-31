@@ -140,7 +140,7 @@ function Install_Forti_SSL_VPN_Package {
     done
     
 }
-
+#Update
 function Install_NXLog_CE_Package {
     clear
     while true; do
