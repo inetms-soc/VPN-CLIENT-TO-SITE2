@@ -315,6 +315,7 @@ function Check_Installed_Package {
     apt list --installed | grep -i nxlog
     apt list --installed | grep -i forti
     apt list --installed | grep -i ppp
+    read -n 1 line
 }
 function Terminate_SOC_Service {
     clear
