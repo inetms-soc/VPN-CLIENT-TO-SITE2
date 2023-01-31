@@ -218,6 +218,7 @@ function Install_NXLog_CE_Package {
                                         echo "You Select 2.NXLog Client Config"
                                         cp -a ./NXLog_Config/nxlog_client.conf /etc/nxlog/nxlog.conf
                                         cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        sleep 2
                                         echo "Copy NXLog_Client.conf to /etc/nxlog complete"
                                         RestartNXLogService
                                         sleep 1
