@@ -123,6 +123,7 @@ function Install_Forti_SSL_VPN_Package {
                 apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
                 echo -e "\n\t******Forti SSL-VPN was installed******"
                 soc_path="/home/socadmin"
+                mkdir $soc_path
                 cp -a ./VPN_Script/*.sh $soc_path
                 echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
                 sleep 1.5
@@ -204,12 +205,15 @@ function Install_NXLog_CE_Package {
                                 esac
                             done
                             while true; do
+                            #Ubuntu
                                 echo -e "\t\t2.2) Please Select Configuration\n\tSelect[1] = NXLog Server\n\tSelect[2] = NXLog Client"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
                                         echo "You Select 1.NXLog Server Config"
                                         cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
+                                        cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        sleep 2
                                         echo "Copy NXLog_Server.conf to /etc/nxlog complete....."
                                         RestartNXLogService
                                         sleep 1
@@ -269,11 +273,13 @@ function Install_NXLog_CE_Package {
                                 esac
                             done
                             while true; do
+                            #CentOS
                                 read -p "2.2) Please Select Configuration 1. NXLog Server  2. NXLog Client ? " VERSION
                                 case $VERSION in
                                     [1] )
                                         echo "You Select 1.NXLog Server Config"
                                         cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog.conf
+                                        cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Server.conf to /etc/nxlog complete....."
                                         RestartNXLogService
                                         echo -en "\n\n\t\t\tHit any key to continue"
@@ -282,6 +288,7 @@ function Install_NXLog_CE_Package {
                                     [2] )
                                         echo "You Select 2.NXLog Client Config"
                                         cp -a ./NXLog_Config/nxlog_client.conf /etc/nxlog.conf
+                                        cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Client.conf to /etc/nxlog complete"
                                         RestartNXLogService
                                         echo -en "\n\n\t\t\tHit any key to continue"
