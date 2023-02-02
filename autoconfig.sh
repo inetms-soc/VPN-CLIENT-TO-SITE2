@@ -46,7 +46,7 @@ echo "
 </Processor>
 " >> nxlog.conf
 done
-
+###
 # Print a message indicating that the hostnames have been saved
 echo "Write Config and saved to nxlog.conf file"
 
