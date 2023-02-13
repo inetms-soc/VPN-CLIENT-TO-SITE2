@@ -67,8 +67,9 @@ do
 <Output fileout_"$customer"_HOST"$i">
     CreateDir TRUE
     Module      om_file
-    File        "\""$customer_path"\"" + "\"/\"" + "\""$customer"_HOST"$i"\"" + "\"/\"" + "\""$customer"_HOST"$i"\"" + "\"-\"" + strftime(now(), "\"%Y-%m-%d-%H\"") + "\".log\""
+    File        "\""$customer_path"\"" + "\"/\"" + "\""$current_hostname"\"" + "\"/\"" + "\""$current_hostname"\"" + "\"-\"" + strftime(now(), "\"%Y-%m-%d-%H\"") + "\".log\""
 </Output>">> /tmp/templatesoc2
+
 #Route Archives - FUNCTION4
 echo "
 
@@ -115,7 +116,7 @@ cat /tmp/templatesoc2 >> nxlog.conf
 cat /tmp/templatesoc3 >> nxlog.conf
 
 # Route To SIEM - FUNCTION 7
-#route_host=$(echo "$route_host" | sed 's/,$//')
+route_host=$(echo "$route_host" | sed 's/,$//')
 #echo $route_host
 echo "#Route Log "$erc_inputname" to "$erc_name" port "$erc_port" " >> /tmp/templatesoc5
 echo "<Route forwardLog>
