@@ -15,7 +15,7 @@ sleep 0.5
 clear
 
 #NXLOG File init
-customer_path="/home/syslog/${customer}_${customer_port}"
+customer_path="/home/syslog/"$customer"_"$customer_port""
 #Main File init
 echo "" > nxlog.conf
 echo "#Filters Host" > /tmp/templatesoc1
