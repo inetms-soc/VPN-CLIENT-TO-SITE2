@@ -9,11 +9,15 @@ echo "#INPUT PORT"
 read -p "Enter the log recieve port's "$customer" customer : " customer_port
 sleep 0.5
 clear
-echo "#INPUT NUMBER OF HOSTNAME"
-read -p "Enter the number of hostnames to retrieve: " number
+echo "#INPUT HOSTNAME"
+echo "Enter the hostnames to retrieve: "
+read -a Hostname
+echo -en "\n\n\t\t\tHit any key to confirm the hostname"
+read -n 1 line
 sleep 0.5
 clear
 
+HostCount=${#Hostname[@]}
 #NXLOG File init
 customer_path="/home/syslog/"$customer"_"$customer_port""
 #Main File init
@@ -36,21 +40,18 @@ echo "
     Exec        parse_syslog();
 </Input>
 " >> nxlog.conf
-
-
-
-for ((i=1; i<=$number; i++))
+for ((i=0; i<$HostCount; i++))
 do
 # Get the hostname of the machine
-    read -p "Enter the Hostname_$i: " Hostname
-    eval "Hostname$i=$Hostname"
-    eval "current_hostname=\$Hostname$i"
+    #read -p "Enter the Hostname_$i: " Hostname
+    eval "Hostname$((i+1))=$Hostname"
+    eval "current_hostname=${Hostname[i]}"
 # Input Log - FUNCTION 4
     echo "
 
-<Input "$customer"Host"$i">
+<Input "$customer"_""HOST"$((i+1))">
     Module      im_file
-    File        "\"/home/syslog/"$customer"/"$current_hostname"/*.log"\"
+    File        "\""$customer_path"/"$current_hostname"/*.log"\"
     SavePos     TRUE
     ReadFromLast TRUE
     PollInterval 1
@@ -58,8 +59,8 @@ do
 </Input>" >> /tmp/templatesoc4
 # Filter Host - FUNCTION02
     echo "
-#Filters Host$i "\"$current_hostname\""
-    <Processor filter_"$customer"_HOST"$i">
+#Filters Host$((i+1)) "\"$current_hostname\""
+    <Processor filter_"$customer"_HOST"$((i+1))">
     Module      pm_filter
     Condition   \$raw_event =~ /"$current_hostname"/
 </Processor>" >> /tmp/templatesoc1
@@ -67,7 +68,7 @@ do
 
     echo "
 
-<Output fileout_"$customer"_HOST"$i">
+<Output fileout_"$customer"_HOST"$((i+1))">
     CreateDir TRUE
     Module      om_file
     File        "\""$customer_path"\"" + "\"/\"" + "\""$current_hostname"\"" + "\"/\"" + "\""$current_hostname"\"" + "\"-\"" + strftime(now(), "\"%Y-%m-%d-%H\"") + "\".log\""
@@ -77,22 +78,28 @@ do
 echo "
 
 <Route "$customer">
-    Path       ""$customer"_"$customer_port"" => filter_"$customer"_HOST"$i" => fileout_"$customer"_HOST"$i"
+    Path       ""$customer"_"$customer_port"" => filter_"$customer"_HOST"$((i+1))" => fileout_"$customer"_HOST"$((i+1))"
 </Route>" >> /tmp/templatesoc3
 
-route_host+=$(echo "$customer"_HOST"$i",)
+route_host+=$(echo "$customer"_HOST"$((i+1))",)
+
 done
 #Collect Route
-clear
+#clear
 #Output To SIEM - FUNCTION5
 
 
 #echo "#Output To SIEM"  >> nxlog.conf
 read -p "Enter the number of route to ERC: " erc_number
+
+#sleep 0.5
+clear
+
 for ((x=1; x<=$erc_number; x++))
 do
 # Get the hostname of the machine
     read -p "Enter the Name of ERC: " erc_name
+    #read -n 1 line
     read -p "Enter the IP's "$erc_name": " erc_ip
     read -p "Enter the Port's "$erc_name": " erc_port
     read -p "Enter the Name of input host that send to "$erc_name" ip: "$erc_ip" port udp: "$erc_port" : " erc_inputname
@@ -140,7 +147,7 @@ clear
 
 
 mv ./nxlog.conf ./$customer-$customer_port.conf
-cp ./$customer-$customer_port.conf /etc/nxlog
+cp ./$customer-$customer_port.conf /etc/nxlog/customer
 
 cat ./$customer-$customer_port.conf
 echo "Copy config to /etc/nxlog/customers .... Done!"
