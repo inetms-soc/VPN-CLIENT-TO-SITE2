@@ -374,7 +374,7 @@ function Connection_Test {
                 status1="TCP port $port is closed"
                 fi
                 #echo "Testing connection to $destination..."
-                echo -e "\n$status1\n$status2\n"
+                echo -e "\n$status1\n"
                 ping -c 5 $target &> /dev/null && echo -e "Ping Connection to $target successful\n*** Connection To Firewall SIEM Success!!! ***" || echo "Ping Connection to $target failed\n*** Can't Connection To Firewall SIEM!!! ***"
                 echo -en "\n\n\t\t\tHit any key to continue"
                 read -n 1 line
