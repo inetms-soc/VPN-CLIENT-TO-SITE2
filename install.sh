@@ -294,14 +294,16 @@ clear
 function addCrontab
 {
 clear
-echo '
+echo "
 #Rotate and Zip Log Files Every midnight
 0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.conf
 #Find log file 7 days and delete log
 30 0 * * * /usr/bin/find /home/syslog/*/ -name '*.gz' -mtime +7 –exec rm {} \;
 #Check Status VPN Connection
 */10 * * * * /home/socadmin/autoconnect.sh
-' > /var/spool/cron/crontabs/root
+#Check Status NXLog Agent
+*/15 * * * * /home/socadmin/nxlog_monitor.sh
+" > /var/spool/cron/crontabs/root
 echo -e "Install Crontab Complete....!\n"
 sleep 1.5
 clear
@@ -531,7 +533,7 @@ function Install_NXLog_CE_Package {
                                         clear
                                         NXLog_Server_Config
                                         cp ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
-                                        cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        #cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         sleep 2
                                         echo "Copy nxlog_server.conf to /etc/nxlog complete....."
                                         RestartNXLogService
@@ -543,7 +545,7 @@ function Install_NXLog_CE_Package {
                                         clear
                                         NXLog_Client_Config
                                         cp ./NXLog_Config/nxlog_client.conf /etc/nxlog/nxlog.conf
-                                        cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        #cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         sleep 2
                                         echo "Copy nxlog_client.conf to /etc/nxlog complete"
                                         RestartNXLogService
@@ -604,7 +606,7 @@ function Install_NXLog_CE_Package {
                                         clear
                                         NXLog_Server_Config
                                         cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog.conf
-                                        cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        #cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Server.conf to /etc/nxlog complete....."
                                         RestartNXLogService
                                         echo -en "\n\n\t\t\tHit any key to continue"
@@ -616,7 +618,7 @@ function Install_NXLog_CE_Package {
                                         clear
                                         NXLog_Client_Config
                                         cp -a ./NXLog_Config/nxlog_client.conf /etc/nxlog.conf
-                                        cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        #cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Client.conf to /etc/nxlog complete"
                                         RestartNXLogService
                                         echo -en "\n\n\t\t\tHit any key to continue"
