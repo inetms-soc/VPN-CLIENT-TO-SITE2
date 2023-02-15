@@ -98,7 +98,214 @@ done
 }
 
 
+function NXLog_Client_Config {
 
+
+echo "----NXLog Client Configuration----"
+read -p "Please input Destination IP's Log Collector: " LogCollectorIP
+read -p "Please input Destination Port's Log Collector (By Default is UDP/514): " LogCollectorPort
+
+
+echo '########################################
+# Global directives                    #
+########################################
+LogFile /var/log/nxlog/nxlog.log
+LogLevel INFO
+
+########################################
+# Archives Log                         #
+########################################
+<Extension _syslog>
+    Module      xm_syslog
+</Extension>
+
+<Extension exec>
+    Module xm_exec
+</Extension>
+
+########################################
+# Input Log Form Host                  #
+########################################
+<Input LocalHost_Logs>
+    Module	im_file
+    File	"/var/log/*"
+    SavePos	TRUE
+    ReadFromLast TRUE
+    PollInterval 1
+    Exec	parse_syslog();
+</Input>
+
+########################################
+#       Forward LOG Collector          #
+########################################
+<Output LogCollector>
+    Module  om_udp
+    Host    '$LogCollectorIP'
+    Port    '$LogCollectorPort'
+    Exec    parse_syslog();
+</Output>
+
+########################################
+# Routes Forward LogRelay              #
+########################################
+<Route forwardLog1>
+   Path        LocalHost_Logs => LogCollector
+</Route>
+' > ./NXLog_Config/nxlog_client.conf
+}
+
+
+function NXLog_Server_Config {
+echo "----NXLog Server Configuration----"
+while true; do
+    echo -e "\n\t\t\t***Please Selelect Destination Host***\n\t\tSelect[1] = logrelay1.local(10.11.100.225)\n\t\tSelect[2] = logrelay2.local(10.11.100.226)\n"
+    read -p "     Select: " LogRelayIP
+    case $LogRelayIP in
+        [1])
+            clear
+            LogRelayIP="logrelay1.local" 
+        break;;
+
+        [2])
+            clear
+            LogRelayIP="logrelay2.local" 
+        break;;
+
+        *)
+        clear
+        echo -e "\n\t\t***Please Confirm Your Selection type [1 or 2]***"
+        sleep 2.2
+        clear;;
+            
+    esac
+done
+clear
+read -p "Please input Destination Port's Log Relay: " LogRelayPort
+
+
+echo '########################################
+# Global directives                    #
+########################################
+#User nxlog
+#Group nxlog
+
+LogFile /var/log/nxlog/nxlog.log
+LogLevel INFO
+
+########################################
+# Archives Log                         #
+########################################
+<Extension _syslog>
+    Module      xm_syslog
+</Extension>
+
+<Extension exec>
+    Module xm_exec
+</Extension>
+
+<Input in1>
+    Module	im_udp
+    Host	0.0.0.0
+    Port	514
+    Exec	parse_syslog();
+</Input>
+
+<Input in2>
+    Module	im_tcp
+    Host	0.0.0.0
+    Port	514
+    Exec	parse_syslog();
+</Input>
+
+<Output fileout1>
+    CreateDir TRUE
+    Module	om_file
+    File	"/home/syslog/" + $MessageSourceAddress + "-" + $HOSTNAME + "/" + $MessageSourceAddress + "-" + strftime(now(), "%Y-%m-%d-%H") + ".log"
+</Output>
+
+
+########################################
+# Routes Archives Log                  #
+########################################
+<Route 1>
+    Path	in1,in2 => fileout1
+</Route>
+
+
+########################################
+# Input Log Form Host                  #
+########################################
+<Input Host1>
+    Module	im_file
+    File	"/home/syslog/*/*.log"
+    SavePos	TRUE
+    ReadFromLast TRUE
+    PollInterval 1
+    Exec	parse_syslog();
+</Input>
+
+
+########################################
+#       Forward LOG Relay              #
+########################################
+<Output LogRelay1>
+    Module  om_tcp
+    Host    '$LogRelayIP'
+    Port    '$LogRelayPort'
+    Exec    parse_syslog();
+</Output>
+
+########################################
+# Routes Forward LogRelay              #
+########################################
+<Route forwardLog1>
+   Path        Host1 => LogRelay1
+</Route>
+
+' > ./NXLog_Config/nxlog_server.conf
+}
+
+
+
+function addlogrotate {
+clear
+#add logrotate.conf
+echo '
+# uncomment this if you want your log files compressed
+compress
+' >> /etc/logrotate.conf
+
+#add logrotate custom path
+echo '
+/home/syslog/*/*.log
+{
+	daily
+	missingok
+	rotate 5
+	compress
+	nocreate
+}
+' >> /etc/logrotate.d/rsyslog
+echo -e "Add Config To LogRotate Done....!!\n"
+sleep 1.5
+clear
+}
+
+function addCrontab
+{
+clear
+echo '
+#Rotate and Zip Log Files Every midnight
+0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.conf
+#Find log file 7 days and delete log
+30 0 * * * /usr/bin/find /home/syslog/*/ -name '*.gz' -mtime +7 –exec rm {} \;
+#Check Status VPN Connection
+*/10 * * * * /home/socadmin/autoconnect.sh
+' > /var/spool/cron/crontabs/root
+echo -e "Install Crontab Complete....!\n"
+sleep 1.5
+clear
+}
 
 
 
@@ -126,6 +333,8 @@ function Connection_Test {
             status2="UDP port $port is closed"
         fi
 
+        
+
         #echo "Testing connection to $destination..."
         echo -e "\n$status1\n$status2\n"
         ping -c 3 $destination &> /dev/null && echo "Ping Connection to $destination successful" || echo "Ping Connection to $destination failed"
@@ -135,7 +344,7 @@ function Connection_Test {
         
     clear
     while true; do
-        echo -e "\n\t\t\t***Please Selelect Destination Host***\n\t\tSelect[1] = logrelay1.local\n\t\tSelect[2] = logrelay2.local\n\t\tSelect[3] = Return to Main menu\n"
+        echo -e "\n\t\t\t***Please Selelect Destination Host***\n\t\tSelect[1] = logrelay1.local\n\t\tSelect[2] = logrelay2.local\n\t\tSelect[3] = VPN Server (FirewallSIEM)\n\t\tSelect[4] = Return to Main menu\n"
         read -p "Select: " destination
         case $destination in
             [1])
@@ -154,11 +363,31 @@ function Connection_Test {
 
             [3])
                 clear
+                target="203.154.171.173"
+                port="10443"
+                echo -e "Connection Testing to: Firewall SIEM"
+                # Test the TCP port
+                echo "Connection to: $target TCP Port: $port"
+                if nc -z -w 1 $target $port; then
+                status1="TCP port $port is open"
+                else
+                status1="TCP port $port is closed"
+                fi
+                #echo "Testing connection to $destination..."
+                echo -e "\n$status1\n$status2\n"
+                ping -c 5 $target &> /dev/null && echo -e "Ping Connection to $target successful\n*** Connection To Firewall SIEM Success!!! ***" || echo "Ping Connection to $target failed\n*** Can't Connection To Firewall SIEM!!! ***"
+                echo -en "\n\n\t\t\tHit any key to continue"
+                read -n 1 line
+            break;;
+
+
+            [4])
+                clear
             break;;
         
             *)
             clear
-            echo -e "\n\t\t***Please Confirm Your Selection type [1 or 2]***"
+            echo -e "\n\t\t***Please Confirm Your Selection type [1 - 3]***"
             sleep 2.2
             clear;;
             
@@ -212,15 +441,16 @@ function Install_Forti_SSL_VPN_Package {
                 sleep 2
                 clear
                 echo -e "**Connecting VPN .......**\n"
+                echo -e "**Please wait just the moment.......**\n"
                 /home/socadmin/forti-vpn.sh &
-
+                sleep 6
                 install_menu
                 #V2="Forti SSL-VPN Package"
             break;;
             # if type no = exit
             [Nn]* )
-            install_menu;;
-            #break;;
+                install_menu
+            break;;
             * )
             echo "Please answer yes or no.";;
         esac
@@ -297,19 +527,25 @@ function Install_NXLog_CE_Package {
                                 case $VERSION in
                                     [1] )
                                         echo "You Select 1.NXLog Server Config"
-                                        cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
-                                        cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        sleep 1
+                                        clear
+                                        NXLog_Server_Config
+                                        cp ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
+                                        cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         sleep 2
-                                        echo "Copy NXLog_Server.conf to /etc/nxlog complete....."
+                                        echo "Copy nxlog_server.conf to /etc/nxlog complete....."
                                         RestartNXLogService
                                         sleep 1
                                     break;;
                                     [2] )
                                         echo "You Select 2.NXLog Client Config"
-                                        cp -a ./NXLog_Config/nxlog_client.conf /etc/nxlog/nxlog.conf
-                                        cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
+                                        sleep 1
+                                        clear
+                                        NXLog_Client_Config
+                                        cp ./NXLog_Config/nxlog_client.conf /etc/nxlog/nxlog.conf
+                                        cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         sleep 2
-                                        echo "Copy NXLog_Client.conf to /etc/nxlog complete"
+                                        echo "Copy nxlog_client.conf to /etc/nxlog complete"
                                         RestartNXLogService
                                         sleep 1
                                     break;;
@@ -364,6 +600,9 @@ function Install_NXLog_CE_Package {
                                 case $VERSION in
                                     [1] )
                                         echo "You Select 1.NXLog Server Config"
+                                        sleep 1
+                                        clear
+                                        NXLog_Server_Config
                                         cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog.conf
                                         cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Server.conf to /etc/nxlog complete....."
@@ -373,6 +612,9 @@ function Install_NXLog_CE_Package {
                                     break;;
                                     [2] )
                                         echo "You Select 2.NXLog Client Config"
+                                        sleep 1
+                                        clear
+                                        NXLog_Client_Config
                                         cp -a ./NXLog_Config/nxlog_client.conf /etc/nxlog.conf
                                         cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Client.conf to /etc/nxlog complete"
@@ -405,8 +647,11 @@ function Install_NXLog_CE_Package {
 function Check_Installed_Package {
     clear
     echo -e "\nValidate Installed Packages...\n"
+    echo -e "\nValidate NXLog Packages...\n"
     apt list --installed | grep -i nxlog
+    echo -e "\nValidate FortiClient Packages...\n"
     apt list --installed | grep -i forti
+    echo -e "\nValidate PPP Packages...\n"
     apt list --installed | grep -i ppp
     echo -e "\nHit any key to continue\n"
     read -n 1 line
@@ -463,13 +708,16 @@ function menu {
 }
 
 # Sub Menu
+#addlogrotate
 function install_menu {
     clear
     while true; do
         echo -e "\t\t\tPlease Select Installation Menu\n"
         echo -e "\t\t1. Install Forti SSL VPN Package"
         echo -e "\t\t2. Install NXLog CE Package"
-        echo -e "\t\t3. Exit to  Main Menu\n"
+        echo -e "\t\t3. Install LogRotate Config (Not Require any input just select for one time)"
+        echo -e "\t\t4. Install Crontab Config   (Not Require any input just select for one time)"
+        echo -e "\t\t5. Exit to  Main Menu\n"
         echo -en "Enter an Option: "
         read -p "" option2
         clear
@@ -481,6 +729,12 @@ function install_menu {
                 Install_NXLog_CE_Package
             break;;
             [3] )
+                addlogrotate
+            break;;
+            [4] )
+                addCrontab
+            break;;
+            [5] )
             break;;
             * )
             echo -e "\t\t**********************************************"

@@ -2,8 +2,8 @@ pkill ppp
 # Provide required parameters
 FORTICLIENT_PATH="/opt/forticlient-sslvpn/64bit/forticlientsslvpn_cli"
 VPN_HOST="203.154.171.173:10443"
-VPN_USER="pcl"
-VPN_PASS="y@F834R3nbS"
+VPN_USER=""
+VPN_PASS="edfs"
  
 # Checks whether vpn is connected
 function checkConnect {

@@ -5,7 +5,7 @@ if [[ $? -eq 0 ]]; then
 else
     echo "Ping failed"
     sleep 2
-    /home/user01/forti-vpn.sh &
+    /home/socadmin/forti-vpn.sh &
     systemctl restart nxlog
     systemctl status nxlog
 fi
