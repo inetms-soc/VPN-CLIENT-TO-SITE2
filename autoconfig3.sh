@@ -147,7 +147,7 @@ clear
 
 
 mv ./nxlog.conf ./$customer-$customer_port.conf
-cp ./$customer-$customer_port.conf /etc/nxlog/customer
+cp ./$customer-$customer_port.conf /etc/nxlog/customers
 
 cat ./$customer-$customer_port.conf
 echo "Copy config to /etc/nxlog/customers .... Done!"

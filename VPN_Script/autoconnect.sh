@@ -6,6 +6,7 @@ else
     echo "Ping failed"
     sleep 2
     /home/socadmin/forti-vpn.sh &
+    /home/socadmin/nxlog_monitor.sh
     systemctl restart nxlog
     systemctl status nxlog
 fi
