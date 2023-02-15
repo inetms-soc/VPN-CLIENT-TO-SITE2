@@ -1,9 +1,17 @@
-pkill ppp
+function VPN_Config {
+
+
+echo "----VPN Configuration------"
+read -p "Please input VPN Username: " vpn_username
+read -p "Please input VPN Password: " vpn_password
+
+
+echo 'pkill ppp
 # Provide required parameters
 FORTICLIENT_PATH="/opt/forticlient-sslvpn/64bit/forticlientsslvpn_cli"
 VPN_HOST="203.154.171.173:10443"
-VPN_USER="pcl"
-VPN_PASS="y@F834R3nbS"
+VPN_USER="'$vpn_username'"
+VPN_PASS="'$vpn_password'"
  
 # Checks whether vpn is connected
 function checkConnect {
@@ -62,4 +70,5 @@ do
     checkConnect
     [ $RUNNING -ne 0 ] && startConnect
 done
-
+' > config.sh
+}
