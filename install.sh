@@ -212,8 +212,8 @@ function Install_Forti_SSL_VPN_Package {
                 sleep 2
                 clear
                 echo -e "**Connecting VPN .......**\n"
-                .$soc_path/forti-vpn.sh &
-                
+                /home/socadmin/forti-vpn.sh &
+
                 install_menu
                 #V2="Forti SSL-VPN Package"
             break;;
