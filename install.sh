@@ -454,10 +454,24 @@ function Install_Forti_SSL_VPN_Package {
                 echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
                 sleep 2
                 clear
-                echo -e "**Connecting VPN .......**\n"
-                echo -e "**Please wait just the moment.......**\n"
-                /home/socadmin/forti-vpn.sh &
-                sleep 6
+                while true; do
+                #echo -e "\n"
+                read -p "Do you want to connect vpn y/n? " yn
+                clear
+                    case $yn in
+                        [Yy]* )
+                            echo "Connecting to VPN....."
+                            /home/socadmin/forti-vpn.sh&
+                            sleep 6
+                            clear
+                        break;;
+                        # if type no = exit
+                        [Nn]* )
+                        break;;
+                        * )
+                        echo "Please answer yes or no.";;
+                    esac
+                done
                 install_menu
                 #V2="Forti SSL-VPN Package"
             break;;
