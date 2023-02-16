@@ -291,7 +291,7 @@ sleep 1.5
 clear
 }
 
-function addCrontab
+function addCrontab_Server
 {
 clear
 echo "
@@ -304,7 +304,19 @@ echo "
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
 " > /var/spool/cron/crontabs/root
-echo -e "Install Crontab Complete....!\n"
+echo -e "Install Crontab Server Complete....!\n"
+sleep 1.5
+clear
+}
+
+function addCrontab_Client
+{
+clear
+echo "
+#Check Status NXLog Agent
+*/15 * * * * /home/socadmin/nxlog_monitor.sh
+" > /var/spool/cron/crontabs/root
+echo -e "Install Crontab Client Complete....!\n"
 sleep 1.5
 clear
 }
@@ -718,8 +730,9 @@ function install_menu {
         echo -e "\t\t1. Install Forti SSL VPN Package"
         echo -e "\t\t2. Install NXLog CE Package"
         echo -e "\t\t3. Install LogRotate Config (Not Require any input just select for one time)"
-        echo -e "\t\t4. Install Crontab Config   (Not Require any input just select for one time)"
-        echo -e "\t\t5. Exit to  Main Menu\n"
+        echo -e "\t\t4. Install Crontab Server Config   (Not Require any input just select for one time)"
+        echo -e "\t\t5. Install Crontab Client Config   (Not Require any input just select for one time)"
+        echo -e "\t\t6. Exit to  Main Menu\n"
         echo -en "Enter an Option: "
         read -p "" option2
         clear
@@ -734,13 +747,16 @@ function install_menu {
                 addlogrotate
             break;;
             [4] )
-                addCrontab
+                addCrontab_Server
             break;;
             [5] )
+                addCrontab_Client
+            break;;
+            [6] )
             break;;
             * )
             echo -e "\t\t**********************************************"
-            echo -e "\t\t***Please Confirm Your Selection type [1-3]***"
+            echo -e "\t\t***Please Confirm Your Selection type [1-5]***"
             echo -e "\t\t**********************************************"
             sleep 1.5
             clear;;
