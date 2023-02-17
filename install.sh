@@ -450,7 +450,7 @@ function Install_Forti_SSL_VPN_Package {
                 sleep 1
                 clear
                 VPN_Config
-                cp -a ./VPN_Script/*.sh $soc_path
+                cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/*.sh $soc_path
                 echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
                 sleep 2
                 clear
@@ -558,7 +558,7 @@ function Install_NXLog_CE_Package {
                                         sleep 1
                                         clear
                                         NXLog_Server_Config
-                                        cp ./NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
+                                        cp ./VPN-CLIENT-TO-SITE/NXLog_Config/nxlog_server.conf /etc/nxlog/nxlog.conf
                                         #cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         sleep 2
                                         echo "Copy nxlog_server.conf to /etc/nxlog complete....."
@@ -570,7 +570,7 @@ function Install_NXLog_CE_Package {
                                         sleep 1
                                         clear
                                         NXLog_Client_Config
-                                        cp ./NXLog_Config/nxlog_client.conf /etc/nxlog/nxlog.conf
+                                        cp ./VPN-CLIENT-TO-SITE/NXLog_Config/nxlog_client.conf /etc/nxlog/nxlog.conf
                                         #cp ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         sleep 2
                                         echo "Copy nxlog_client.conf to /etc/nxlog complete"
@@ -631,7 +631,7 @@ function Install_NXLog_CE_Package {
                                         sleep 1
                                         clear
                                         NXLog_Server_Config
-                                        cp -a ./NXLog_Config/nxlog_server.conf /etc/nxlog.conf
+                                        cp ./VPN-CLIENT-TO-SITE/NXLog_Config/nxlog_server.conf /etc/nxlog.conf
                                         #cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Server.conf to /etc/nxlog complete....."
                                         RestartNXLogService
@@ -643,7 +643,7 @@ function Install_NXLog_CE_Package {
                                         sleep 1
                                         clear
                                         NXLog_Client_Config
-                                        cp -a ./NXLog_Config/nxlog_client.conf /etc/nxlog.conf
+                                        cp ./VPN-CLIENT-TO-SITE/NXLog_Config/nxlog_client.conf /etc/nxlog.conf
                                         #cp -a ./NXLog_Config/nxlog_monitor.sh /etc/cron.hourly
                                         echo "Copy NXLog_Client.conf to /etc/nxlog complete"
                                         RestartNXLogService
