@@ -94,7 +94,7 @@ do
     checkConnect
     [ $RUNNING -ne 0 ] && startConnect
 done
-' > ./VPN_Script/forti-vpn.sh
+' > ./VPN-CLIENT-TO-SITE/VPN_Script/forti-vpn.sh
 }
 
 
@@ -151,7 +151,7 @@ LogLevel INFO
 <Route forwardLog1>
    Path        LocalHost_Logs => LogCollector
 </Route>
-' > ./NXLog_Config/nxlog_client.conf
+' > ./VPN-CLIENT-TO-SITE/NXLog_Config/nxlog_client.conf
 }
 
 
@@ -262,7 +262,7 @@ LogLevel INFO
    Path        Host1 => LogRelay1
 </Route>
 
-' > ./NXLog_Config/nxlog_server.conf
+' > ./VPN-CLIENT-TO-SITE/NXLog_Config/nxlog_server.conf
 }
 
 
@@ -450,7 +450,7 @@ function Install_Forti_SSL_VPN_Package {
                 sleep 1
                 clear
                 VPN_Config
-                cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/*.sh $soc_path
+                cp ./VPN-CLIENT-TO-SITE/VPN_Script/*.sh $soc_path
                 echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
                 sleep 2
                 clear
