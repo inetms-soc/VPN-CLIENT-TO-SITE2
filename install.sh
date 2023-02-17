@@ -443,7 +443,7 @@ function Install_Forti_SSL_VPN_Package {
         case $yn in
             [Yy]* )
                 echo "Installing Forti SSL-VPN Package....."
-                apt install ./VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
+                apt install ./VPN-CLIENT-TO-SITE/VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
                 echo -e "\n\t******Forti SSL-VPN was installed******"
                 soc_path="/home/socadmin"
                 mkdir $soc_path
@@ -510,7 +510,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t***You Select 1.Ubuntu16.04***"
                                         sleep 1.5
                                         clear
-                                        apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu16_amd64.deb -y
+                                        apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu16_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu16 was installed"
                                         sleep 1
                                         clear
@@ -519,7 +519,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t***You Select 1.Ubuntu18.04***"
                                         sleep 1.5
                                         clear
-                                        apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
+                                        apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu18 was installed"
                                         sleep 1
                                         clear
@@ -528,7 +528,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t***You Select 1.Ubuntu20.04***"
                                         sleep 1.5
                                         clear
-                                        apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu20_amd64.deb -y
+                                        apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu20_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu20 was installed"
                                         sleep 1
                                         clear
@@ -537,7 +537,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t***You Select 1.Ubuntu22.04***"
                                         sleep 1.5
                                         clear
-                                        apt install ./NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu22_amd64.deb -y
+                                        apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu22_amd64.deb -y
                                         echo "nxlog-ce_3.1.2319_ubuntu22 was installed"
                                         sleep 1
                                         clear
@@ -593,25 +593,25 @@ function Install_NXLog_CE_Package {
                                 case $VERSION in
                                     [1] )
                                         echo "You Select 1.CentOS6"
-                                        yum install ./NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-2.10.2150_rhel6.x86_64.rpm -y
+                                        yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-2.10.2150_rhel6.x86_64.rpm -y
                                         echo "nxlog-ce-2.10.2150_rhel6 was installed"
                                         sleep 1
                                     break;;
                                     [2] )
                                         echo "You Select 2.CentOS7"
-                                        yum install ./NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel7.x86_64.rpm -y
+                                        yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel7.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel7 was installed"
                                         sleep 1
                                     break;;
                                     [3] )
                                         echo "You Select 3.CentOS8"
-                                        yum install ./NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel8.x86_64.rpm -y
+                                        yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel8.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel8 was installed"
                                         sleep 1
                                     break;;
                                     [4]  )
                                         echo "You Select 4.CentOS9"
-                                        yum install ./NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel9.x86_64.rpm -y
+                                        yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel9.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel9 was installed"
                                         sleep 1
                                     break;;
