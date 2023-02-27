@@ -273,9 +273,6 @@ function addlogrotate {
 clear
 #add logrotate.conf
 echo '
-# create new (empty) log files after rotating old ones
-create
-
 # uncomment this if you want your log files compressed
 dateext
 ' >> /etc/logrotate.conf
