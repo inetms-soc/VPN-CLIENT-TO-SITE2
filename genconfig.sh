@@ -1,17 +1,19 @@
 #!/bin/bash
 clear
 # Get the input number from the user
-echo "#Define Hostname"
-read -p "Enter the name of customer: " customer
+echo -e "\n\t\t\t\t*** NXLog Config Script for LogRelay ***\n"
+read -p "Step #[1] - Enter the name of customer: " customer
 sleep 0.5
 clear
-echo "#INPUT PORT"
-read -p "Enter the log recieve port's "$customer" customer : " customer_port
+echo -e "\n\t\t\t\t*** "$customer" 's Port Log Recieve ***\n"
+read -p "Step #[2] - Enter the log recieve port's "$customer" customer : " customer_port
 sleep 0.5
 clear
-echo "#INPUT HOSTNAME"
-echo "Enter the hostnames to retrieve: "
+echo -e "\n\t\t\t\t*** "$customer" 's Hostname ***\n"
+echo "Step #[3] - Enter the hostnames to retrieve [use space delimeter host]: "
+echo -e "\n********************************************************************************************************"
 read -a Hostname
+echo "********************************************************************************************************"
 echo -en "\n\n\t\t\tHit any key to confirm the hostname"
 read -n 1 line
 sleep 0.5
@@ -30,7 +32,7 @@ echo "" > /tmp/templatesoc5
 
 # INPUT Log File - FUNCTION 01
 # Loop the specified number of times to get the hostname
-echo "#Auto Config NXLOG - Demo01" > nxlog.conf
+echo "#NXLOG Config - "$customer" Customer" > nxlog.conf
 echo "
 #INPUT PORT
 <Input ""$customer"_"$customer_port"">
@@ -90,7 +92,8 @@ done
 
 
 #echo "#Output To SIEM"  >> nxlog.conf
-read -p "Enter the number of route to ERC: " erc_number
+echo -e "\n\t\t\t\t*** Add Number "$customer" 's Route ***\n"
+read -p "Step #[4] - How many route to ERC [Default=1]: " erc_number
 
 #sleep 0.5
 clear
@@ -98,11 +101,63 @@ clear
 for ((x=1; x<=$erc_number; x++))
 do
 # Get the hostname of the machine
-    read -p "Enter the Name of ERC: " erc_name
-    #read -n 1 line
-    read -p "Enter the IP's "$erc_name": " erc_ip
-    read -p "Enter the Port's "$erc_name": " erc_port
-    read -p "Enter the Name of input host that send to "$erc_name" ip: "$erc_ip" port udp: "$erc_port" : " erc_inputname
+    #!/bin/bash
+
+while true; do
+    echo -e "\n\t\t\t\t*** Please Select ERC for Send "$customer"'s Log ***\n"
+    echo -e "\n\t\t\t\t\t[1] ERC1 (10.11.100.129)\n\t\t\t\t\t[2] ERC2 (10.11.100.131)\n\t\t\t\t\t[3] ERC4 (10.11.100.132)\n\t\t\t\t\t[4] Enter IP manually\n\t\t\t\t\t[5] Quit"
+    read -p "Step #[5] --------------- Select ERC: " ERC
+    case $ERC in
+        [1])
+            clear
+            echo -e "\t\t\tERC1 detected with IP address 10.11.100.129"
+            erc_ip=10.11.100.129
+            erc_name="ERC1"
+        break;;
+
+       [2])
+            clear
+            echo -e "\t\t\tERC2 detected with IP address 10.11.100.131"
+            erc_ip=10.11.100.131
+            erc_name="ERC2"
+        break;;
+ 
+       [3])
+            clear
+            echo -e "\t\t\tERC4 detected with IP address 10.11.100.132"
+            erc_ip=10.11.100.132
+            erc_name="ERC4"
+        break;;
+
+       [4])
+            clear
+            read -p "Enter Name ERC: " erc_name
+            read -p "Enter the IP address: " erc_ip
+        break;;
+      
+       [5])
+            echo -e "\t\t\tExiting the script..."
+        break;;       
+
+
+        *)
+        clear
+        echo -e "\n\t\t***Please Confirm Your Selection type [1 - 5]***"
+        sleep 2.2
+        clear;;
+            
+    esac
+done
+     
+    #read -p "Enter the IP's "$erc_name": " erc_ip
+    sleep 2.2
+    clear
+    echo -e "\n\t\t\t\t*** Please Select the Port's "$erc_name" for Send "$customer"'s Log ***\n"
+    read -p "Step #[6] - Enter the Port's "$erc_name": " erc_port
+    sleep 0.5
+    clear
+    echo -e "\n\t\t\t\t*** Please Select the name for "$customer"'s route ***\n"
+    read -p "Step #[7] - Enter the Name of input host that send to "$erc_name" ip: "$erc_ip" port udp: "$erc_port": " erc_inputname
     eval "erc_name$x=$erc_name"
     eval "erc_ip$x=$erc_ip"
     eval "erc_port$x=$erc_port"
@@ -118,12 +173,6 @@ echo "<Output "$current_erc_name"_"$customer"_"$current_erc_inputname">
     Port    "$current_erc_port"
 </Output>
 " >> /tmp/templatesoc5
-done
-     
-#Wite Sequence
-cat /tmp/templatesoc1 >> nxlog.conf
-cat /tmp/templatesoc2 >> nxlog.conf
-cat /tmp/templatesoc3 >> nxlog.conf
 
 # Route To SIEM - FUNCTION 7
 route_host=$(echo "$route_host" | sed 's/,$//')
@@ -135,13 +184,19 @@ echo "<Route forwardLog>
 " >> /tmp/templatesoc5
 clear
 
+done
+     
+#Wite Sequence
+cat /tmp/templatesoc1 >> nxlog.conf
+cat /tmp/templatesoc2 >> nxlog.conf
+cat /tmp/templatesoc3 >> nxlog.conf
 cat /tmp/templatesoc4 >> nxlog.conf
 cat /tmp/templatesoc5 >> nxlog.conf
 
 
 ###
 # Print a message indicating that the hostnames have been saved
-echo "Write Config and saved to nxlog.conf file"
+
 
 clear
 
@@ -150,4 +205,5 @@ mv ./nxlog.conf ./$customer-$customer_port.conf
 cp ./$customer-$customer_port.conf /etc/nxlog/customers
 
 cat ./$customer-$customer_port.conf
-echo "Copy config to /etc/nxlog/customers .... Done!"
+
+echo "Write Config and saved "$customer-$customer_port.conf" to /etc/nxlog/customers ....Done!!!"
