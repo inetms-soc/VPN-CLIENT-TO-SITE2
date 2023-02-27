@@ -24,8 +24,7 @@ function System_Info {
 
 function VPN_Config {
 
-
-echo "----VPN Configuration------"
+echo -e "\n\t\t\t\t*** [ VPN Configuration ] ***\n"
 read -p "Please input VPN Username: " vpn_username
 read -p "Please input VPN Password: " vpn_password
 
@@ -100,10 +99,9 @@ done
 
 function NXLog_Client_Config {
 
-
-echo "----NXLog Client Configuration----"
-read -p "Please input Destination IP's Log Collector: " LogCollectorIP
-read -p "Please input Destination Port's Log Collector (By Default is UDP/514): " LogCollectorPort
+echo -e "\n\t\t\t\t*** [ NXLog Client Configuration ] ***\n"
+read -p "Please input Destination Log Relay's IP: " LogCollectorIP
+read -p "Please input Destination Log Relay's Port (By Default is UDP/514): " LogCollectorPort
 
 
 echo '########################################
@@ -156,9 +154,9 @@ LogLevel INFO
 
 
 function NXLog_Server_Config {
-echo "----NXLog Server Configuration----"
+echo -e "\n\t\t\t\t*** [ NXLog Server Configuration ] ***\n"
 while true; do
-    echo -e "\n\t\t\t***Please Selelect Destination Host***\n\t\tSelect[1] = logrelay1.local(10.11.100.225)\n\t\tSelect[2] = logrelay2.local(10.11.100.226)\n"
+    echo -e "\n\t\t\t***Please Selelect Log Relay's Host***\n\t\tSelect [1] = logrelay1.local(10.11.100.225)\n\t\tSelect [2] = logrelay2.local(10.11.100.226)\n\n\t\tSelect [3] = Enter Log Relay's IP Manually\n"
     read -p "     Select: " LogRelayIP
     case $LogRelayIP in
         [1])
@@ -171,18 +169,22 @@ while true; do
             LogRelayIP="logrelay2.local" 
         break;;
 
+        [3])
+            clear
+            read -p "Enter Log Relay's IP or Domain Name: " LogRelayIP
+        break;;
+
         *)
         clear
-        echo -e "\n\t\t***Please Confirm Your Selection type [1 or 2]***"
+        echo -e "\n\t\t***Please Confirm Your Selection type [1 - 3]***"
         sleep 2.2
         clear;;
             
     esac
 done
 clear
-read -p "Please input Destination Port's Log Relay: " LogRelayPort
 
-
+read -p "Please input Destination Log Relay's Port: " LogRelayPort
 echo '########################################
 # Global directives                    #
 ########################################
@@ -271,8 +273,11 @@ function addlogrotate {
 clear
 #add logrotate.conf
 echo '
+# create new (empty) log files after rotating old ones
+create
+
 # uncomment this if you want your log files compressed
-compress
+dateext
 ' >> /etc/logrotate.conf
 
 #add logrotate custom path
@@ -286,7 +291,7 @@ echo '
 	nocreate
 }
 ' >> /etc/logrotate.d/rsyslog
-echo -e "Add Config To LogRotate Done....!!\n"
+echo -e "Add Config To Log Rotate Done....!!\n"
 sleep 1.5
 clear
 }
@@ -304,7 +309,8 @@ echo "
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
 " > /var/spool/cron/crontabs/root
-echo -e "Install Crontab Server Complete....!\n"
+systemctl restart cron
+echo -e "Install Crontab Log Server complete....!\n"
 sleep 1.5
 clear
 }
@@ -316,7 +322,7 @@ echo "
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
 " > /var/spool/cron/crontabs/root
-echo -e "Install Crontab Client Complete....!\n"
+echo -e "Install Crontab Log Client Complete....!\n"
 sleep 1.5
 clear
 }
@@ -341,7 +347,7 @@ function Connection_Test {
 
         # Test the UDP port
         echo "Connection to: $target UDP Port: $port"
-        if nc -zu -w 1 $target $port; then
+        if nc -z -u -w 1 $target $port; then
             status2="UDP port $port is open"
         else
             status2="UDP port $port is closed"
@@ -401,7 +407,7 @@ function Connection_Test {
         
             *)
             clear
-            echo -e "\n\t\t***Please Confirm Your Selection type [1 - 3]***"
+            echo -e "\n\t\t***Please Confirm Your Selection type [1 - 4]***"
             sleep 2.2
             clear;;
             
@@ -410,7 +416,7 @@ function Connection_Test {
 }
 
 function RestartNXLogService {
-    echo "service is restarting..."
+    echo "service nxlog is restarting..."
     systemctl restart nxlog
     systemctl status nxlog
 }
@@ -426,7 +432,7 @@ function Install_Forti_SSL_VPN_Package {
             [Yy]* )
                 echo "Installing PPP Package....."
                 apt install ppp expect -y
-                echo -e "\n\t******PPP Expect was installed******\n"
+                echo -e "\n\t****** PPP Expect was installed ******\n"
                 sleep 1.5
                 clear
             break;;
@@ -444,7 +450,7 @@ function Install_Forti_SSL_VPN_Package {
             [Yy]* )
                 echo "Installing Forti SSL-VPN Package....."
                 apt install ./VPN-CLIENT-TO-SITE/VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
-                echo -e "\n\t******Forti SSL-VPN was installed******"
+                echo -e "\n\t****** Forti SSL-VPN was installed ******"
                 soc_path="/home/socadmin"
                 mkdir $soc_path
                 sleep 1
@@ -495,7 +501,7 @@ function Install_NXLog_CE_Package {
         case $yn in
             [Yy]* )
                 while true; do
-                    echo -e "\n\t\t\t***Which type of your Operating System***\n\tSelect[1] = Ubuntu\n\tSelect[2] = CentOS\n"
+                    echo -e "\n\t\t\t***Which type of your Operating System***\n\tSelect [1] = Ubuntu\n\tSelect [2] = CentOS\n"
                     read -p "Select: " OS
                     case $OS in
                         [1] )
@@ -503,11 +509,11 @@ function Install_NXLog_CE_Package {
                             sleep 1.5
                             clear
                             while true; do
-                                echo -e "\t\t\tWhich type of OS Version\n\t   Select[1] = Ubuntu16.04\n\t   Select[2] = Ubuntu18.04\n\t   Select[3] = Ubuntu20.04\n\t   Select[4] = Ubuntu22.04"
+                                echo -e "\t\t\tWhich type of OS Version\n\t   Select [1] = Ubuntu16.04\n\t   Select [2] = Ubuntu18.04\n\t   Select [3] = Ubuntu20.04\n\t   Select [4] = Ubuntu22.04"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
-                                        echo -e "\n\t***You Select 1.Ubuntu16.04***"
+                                        echo -e "\n\t*** You Select Ubuntu16.04 ***"
                                         sleep 1.5
                                         clear
                                         apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu16_amd64.deb -y
@@ -516,7 +522,7 @@ function Install_NXLog_CE_Package {
                                         clear
                                     break;;
                                     [2] )
-                                        echo -e "\n\t***You Select 1.Ubuntu18.04***"
+                                        echo -e "\n\t*** You Select Ubuntu18.04 ***"
                                         sleep 1.5
                                         clear
                                         apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu18_amd64.deb -y
@@ -525,7 +531,7 @@ function Install_NXLog_CE_Package {
                                         clear
                                     break;;
                                     [3] )
-                                        echo -e "\n\t***You Select 1.Ubuntu20.04***"
+                                        echo -e "\n\t*** You Select Ubuntu20.04 ***"
                                         sleep 1.5
                                         clear
                                         apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu20_amd64.deb -y
@@ -534,7 +540,7 @@ function Install_NXLog_CE_Package {
                                         clear
                                     break;;
                                     [4] )
-                                        echo -e "\n\t***You Select 1.Ubuntu22.04***"
+                                        echo -e "\n\t*** You Select Ubuntu22.04 ***"
                                         sleep 1.5
                                         clear
                                         apt install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_Ubuntu_Agents/nxlog-ce_3.1.2319_ubuntu22_amd64.deb -y
@@ -550,11 +556,11 @@ function Install_NXLog_CE_Package {
                             done
                             while true; do
                             #Ubuntu
-                                echo -e "\t\t2.2) Please Select Configuration\n\tSelect[1] = NXLog Server\n\tSelect[2] = NXLog Client"
+                                echo -e "\t\t2.2) Please Select Configuration\n\tSelect [1] = NXLog Server\n\tSelect [2] = NXLog Client"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
-                                        echo "You Select 1.NXLog Server Config"
+                                        echo "You Select NXLog Server Config"
                                         sleep 1
                                         clear
                                         NXLog_Server_Config
@@ -566,7 +572,7 @@ function Install_NXLog_CE_Package {
                                         sleep 1
                                     break;;
                                     [2] )
-                                        echo "You Select 2.NXLog Client Config"
+                                        echo "You Select NXLog Client Config"
                                         sleep 1
                                         clear
                                         NXLog_Client_Config

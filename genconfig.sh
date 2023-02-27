@@ -136,7 +136,7 @@ while true; do
         break;;
       
        [5])
-            echo -e "\t\t\tExiting the script..."
+            echo "Exiting the script..."
         break;;       
 
 
