@@ -1,5 +1,27 @@
 #!/bin/bash
+nc="\033[00m"
+white="\033[1;37m"
+grey="\033[0;37m"
+purple="\033[0;35m"
+red="\033[1;31m"
+green="\033[32m"
+yellow="\033[33m"
+purple="\033[0;35m"
+cyan="\033[1;36m"
+cafe="\033[1;33m"
+fiuscha="\033[0;35m"
+blue="\033[34m"
+orange="\033[38;5;122m"
 
+REDBG="$(printf '\033[41m')"
+GREENBG="$(printf '\033[42m')"
+ORANGEBG="$(printf '\033[43m')"
+BLUEBG="$(printf '\033[44m')"
+MAGENTABG="$(printf '\033[45m')"
+CYANBG="$(printf '\033[46m')"
+WHITEBG="$(printf '\033[47m')"
+LACKBG="$(printf '\033[40m')"
+RESETBG="$(printf '\e[0m')"
 #Sub Function in Main Function
 function System_Info {
     clear
@@ -751,30 +773,6 @@ function Terminate_SOC_Service {
 }
 # Main Menu
 function menu {
-    nc="\033[00m"
-    white="\033[1;37m"
-    grey="\033[0;37m"
-    purple="\033[0;35m"
-    red="\033[1;31m"
-    green="\033[32m"
-    yellow="\033[33m"
-    purple="\033[0;35m"
-    cyan="\033[1;36m"
-    cafe="\033[1;33m"
-    fiuscha="\033[0;35m"
-    blue="\033[34m"
-    orange="\033[38;5;122m"
-
-
-    REDBG="$(printf '\033[41m')"
-    GREENBG="$(printf '\033[42m')"
-    ORANGEBG="$(printf '\033[43m')"
-    BLUEBG="$(printf '\033[44m')"
-    MAGENTABG="$(printf '\033[45m')"
-    CYANBG="$(printf '\033[46m')"
-    WHITEBG="$(printf '\033[47m')"
-    BLACKBG="$(printf '\033[40m')"
-    RESETBG="$(printf '\e[0m')"
     clear
     echo
     echo -e "\t\t  ${green}${WHITEBG}                             ${nc}" 
