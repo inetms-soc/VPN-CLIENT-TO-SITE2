@@ -296,6 +296,9 @@ clear
 function addCrontab_Server
 {
 clear
+# Create a temporary file to store the new crontab entry
+TEMP_FILE=$(mktemp)
+
 echo "
 #Rotate and Zip Log Files Every midnight
 0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.conf
@@ -305,7 +308,16 @@ echo "
 */10 * * * * /home/socadmin/autoconnect.sh
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
-" > /var/spool/cron/crontabs/root
+" > "${TEMP_FILE}"
+#Old Path Crontab Log
+#/var/spool/cron/crontabs/root
+
+#Add Crontab
+crontab "${TEMP_FILE}"
+
+# Remove the temporary file
+rm "${TEMP_FILE}"
+
 systemctl restart cron
 echo -e "Install Crontab Log Server complete....!\n"
 sleep 1.5
@@ -315,11 +327,26 @@ clear
 function addCrontab_Client
 {
 clear
+# Create a temporary file to store the new crontab entry
+TEMP_FILE=$(mktemp)
+
 echo "
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
-" > /var/spool/cron/crontabs/root
+" > "${TEMP_FILE}"
+
+#Old Crontab Path
+#/var/spool/cron/crontabs/root
+
+# Load the new crontab entry into the user's crontab
+crontab "${TEMP_FILE}"
+
+# Remove the temporary file
+rm "${TEMP_FILE}"
+
+systemctl restart cron
 echo -e "Install Crontab Log Client Complete....!\n"
+
 sleep 1.5
 clear
 }
