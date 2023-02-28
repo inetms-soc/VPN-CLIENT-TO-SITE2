@@ -100,8 +100,8 @@ done
 function NXLog_Client_Config {
 
 echo -e "\n\t\t\t\t*** [ NXLog Client Configuration ] ***\n"
-read -p "Please input Destination Log Relay's IP: " LogCollectorIP
-read -p "Please input Destination Log Relay's Port (By Default is UDP/514): " LogCollectorPort
+read -p "Please input Destination Log Collector's IP: " LogCollectorIP
+read -p "Please input Destination Log Collector's Port (By Default is UDP/514): " LogCollectorPort
 
 
 echo '########################################
@@ -751,16 +751,42 @@ function Terminate_SOC_Service {
 }
 # Main Menu
 function menu {
+    nc="\033[00m"
+    white="\033[1;37m"
+    grey="\033[0;37m"
+    purple="\033[0;35m"
+    red="\033[1;31m"
+    green="\033[32m"
+    yellow="\033[33m"
+    purple="\033[0;35m"
+    cyan="\033[1;36m"
+    cafe="\033[1;33m"
+    fiuscha="\033[0;35m"
+    blue="\033[34m"
+    orange="\033[38;5;122m"
+
+
+    REDBG="$(printf '\033[41m')"
+    GREENBG="$(printf '\033[42m')"
+    ORANGEBG="$(printf '\033[43m')"
+    BLUEBG="$(printf '\033[44m')"
+    MAGENTABG="$(printf '\033[45m')"
+    CYANBG="$(printf '\033[46m')"
+    WHITEBG="$(printf '\033[47m')"
+    BLACKBG="$(printf '\033[40m')"
+    RESETBG="$(printf '\e[0m')"
     clear
     echo
-    echo -e "\t\t\tInstallation Menu\n"
-    echo -e "\t1. System Information"
-    echo -e "\t2. Network Connection Test"
-    echo -e "\t3. Installation Menu"
-    echo -e "\t4. Check Installed Package on Device"
-    echo -e "\t5. Terminate SOC Service"
-    echo -e "\t0. Exit Menu\n\n"
-    echo -en "\t\tEnter an Option: "
+    echo -e "\t\t  ${green}${WHITEBG}                             ${nc}" 
+    echo -e "\t\t  ${WHITEBG}   \e[1;32m SOC Installation Menu    \e[0m${nc}"
+    echo -e "\t\t  ${green}${WHITEBG}                             ${nc}\n\n"
+    echo -e "\t\t${white}[1] ${BLUEBG}Check System Information${nc}\n"
+    echo -e "\t\t${white}[2] ${BLUEBG}Check Network Connection${nc}\n"
+    echo -e "\t\t${white}[3] ${BLUEBG}Installation Packages${nc}\n"
+    echo -e "\t\t${white}[4] ${BLUEBG}Check Installed Packages on Device${nc}\n"
+    echo -e "\t\t${white}[5] ${REDBG}Terminate SOC Service${nc}\n"
+    echo -e "\t\t${white}[0] ${BLUEBG}Exit Menu${nc}\n\n"
+    echo -en "Enter an Option: "
     read -p "" option
     #read -n 1 option | not enter to prompt
 }
@@ -833,9 +859,10 @@ do
 
         *)
         clear
-        echo -e "\t\t**************************************"
+        echo -e "\t\t${red}${WHITEBG}**************************************"
         echo -e "\t\t***Sorry, Please Select Number[1-5]***"
-        echo -e "\t\t**************************************"
+        echo -e "\t\t**************************************${nc}"
+        sleep 2
     esac
     #echo -en "\n\n\t\t\tHit any key to continue"
     #read -n 1 line
