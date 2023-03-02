@@ -26,6 +26,7 @@ RESETBG="$(printf '\e[0m')"
 
 function System_Info {
 
+    clear
     # Detect OS type and version
     if [ -f /etc/os-release ]; then
     # For modern Linux distributions that use systemd
@@ -53,7 +54,7 @@ function System_Info {
     HOSTNAME=$(hostname)
 
     #clear
-    #echo -e "\t\t\t${BLUEBG}${white}*** Systeminfo Gathering ***${nc}\n"
+    echo -e "\t\t\t${BLUEBG}${white}*** Systeminfo Gathering ***${nc}\n"
     # Get the operating system type
     #os_type=$(lsb_release -i | awk '{print $3}')
     # Get the version of Ubuntu
