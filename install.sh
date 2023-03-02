@@ -25,7 +25,7 @@ RESETBG="$(printf '\e[0m')"
 #Sub Function in Main Function
 function System_Info {
     clear
-    echo -e "\t\t\t*** Systeminfo Gathering ***\n"
+    echo -e "\t\t\t${BLUEBG}${white}*** Systeminfo Gathering ***${nc}\n"
     # Get the operating system type
     os_type=$(lsb_release -i | awk '{print $3}')
     # Get the version of Ubuntu
@@ -37,9 +37,9 @@ function System_Info {
     public_ip=$(curl -s ipinfo.io/ip)
     
     # Print the operating system type and version to the console
-    echo -e "\t\t\tOperating System Type: $os_type \n\t\t\tVersion: $version"
-    echo -e "\t\t\tHostname: $hostname"
-    echo -e "\t\t\tPrivate IP: $private_ip\n\t\t\tPublic IP: $public_ip"
+    echo -e "\t\t\tOperating System Type: ${cyan}$os_type${nc} \n\t\t\tVersion: ${cyan}$version${nc}"
+    echo -e "\t\t\tHostname: ${cyan}$hostname${nc}"
+    echo -e "\t\t\tPrivate IP: ${cyan}$private_ip${nc}\n\t\t\tPublic IP: ${cyan}$public_ip${nc}"
     echo -en "\n\n\t\t\tHit any key to continue"
     read -n 1 line
 }
@@ -410,7 +410,7 @@ function Connection_Test {
         
     clear
     while true; do
-        echo -e "\n\t\t\t***Please Selelect Destination Host***\n\t\tSelect[1] = logrelay1.local\n\t\tSelect[2] = logrelay2.local\n\t\tSelect[3] = VPN Server (FirewallSIEM)\n\t\tSelect[4] = Return to Main menu\n"
+        echo -e "\t\t\t${MAGENTABG}${white}***Please Selelect Destination Host***${nc}\n\t\tSelect[1] = logrelay1.local\n\t\tSelect[2] = logrelay2.local\n\t\tSelect[3] = VPN Server (FirewallSIEM)\n\t\tSelect[4] = Return to Main menu\n"
         read -p "Select: " destination
         case $destination in
             [1])
@@ -794,7 +794,7 @@ function menu {
 function install_menu {
     clear
     while true; do
-        echo -e "\t\t\tPlease Select Installation Menu\n"
+        echo -e "\t\t\t${BLUEBG}${white}*** Please Select Installation Menu ***${nc}\n"
         echo -e "\t\t1. Install Forti SSL VPN Package"
         echo -e "\t\t2. Install NXLog CE Package"
         echo -e "\t\t3. Install LogRotate Config (Not Require any input just select for one time)"
