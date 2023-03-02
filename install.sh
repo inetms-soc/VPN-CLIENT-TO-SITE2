@@ -23,23 +23,51 @@ WHITEBG="$(printf '\033[47m')"
 LACKBG="$(printf '\033[40m')"
 RESETBG="$(printf '\e[0m')"
 #Sub Function in Main Function
+
 function System_Info {
-    clear
-    echo -e "\t\t\t${BLUEBG}${white}*** Systeminfo Gathering ***${nc}\n"
+
+    # Detect OS type and version
+    if [ -f /etc/os-release ]; then
+    # For modern Linux distributions that use systemd
+    . /etc/os-release
+        OS=$NAME
+        VER=$VERSION_ID
+    elif [ -f /etc/lsb-release ]; then
+    # For Ubuntu and Debian based distributions
+        . /etc/lsb-release
+        OS=$DISTRIB_ID
+        VER=$DISTRIB_RELEASE
+    else
+        # For other Linux distributions
+        OS=$(uname -s)
+        VER=$(uname -r)
+    fi
+
+# Get private IP address
+    PRIV_IP=$(hostname -I | awk '{print $1}')
+
+# Get public IP address
+#PUB_IP=$(curl -s https://checkip.amazonaws.com)
+
+# Get hostname
+    HOSTNAME=$(hostname)
+
+    #clear
+    #echo -e "\t\t\t${BLUEBG}${white}*** Systeminfo Gathering ***${nc}\n"
     # Get the operating system type
-    os_type=$(lsb_release -i | awk '{print $3}')
+    #os_type=$(lsb_release -i | awk '{print $3}')
     # Get the version of Ubuntu
-    version=$(lsb_release -r | awk '{print $2}')
+    #version=$(lsb_release -r | awk '{print $2}')
     # Get Hostname
-    hostname=$(hostname)
+    #hostname=$(hostname)
     # Get Private IP and Public IP Address
-    private_ip=$(ip addr show |grep -E 'ens|wlp|eth' | grep "inet " | awk '{print $2}' | cut -d/ -f1)
+    #private_ip=$(ip addr show |grep -E 'ens|wlp|eth' | grep "inet " | awk '{print $2}' | cut -d/ -f1)
     public_ip=$(curl -s ipinfo.io/ip)
     
     # Print the operating system type and version to the console
-    echo -e "\t\t\tOperating System Type: ${cyan}$os_type${nc} \n\t\t\tVersion: ${cyan}$version${nc}"
-    echo -e "\t\t\tHostname: ${cyan}$hostname${nc}"
-    echo -e "\t\t\tPrivate IP: ${cyan}$private_ip${nc}\n\t\t\tPublic IP: ${cyan}$public_ip${nc}"
+    echo -e "\t\t\tOperating System Type: ${cyan}$OS${nc} \n\t\t\tVersion: ${cyan}$VER${nc}"
+    echo -e "\t\t\tHostname: ${cyan}$HOSTNAME${nc}"
+    echo -e "\t\t\tPrivate IP: ${cyan}$PRIV_IP${nc}\n\t\t\tPublic IP: ${cyan}$public_ip${nc}"
     echo -en "\n\n\t\t\tHit any key to continue"
     read -n 1 line
 }
