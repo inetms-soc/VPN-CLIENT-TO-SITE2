@@ -805,7 +805,7 @@ function menu {
     clear
     echo
     echo -e "\t\t  ${green}${WHITEBG}                             ${nc}" 
-    echo -e "\t\t  ${WHITEBG}   \e[1;32m SOC Installation Menu    \e[0m${nc}"
+    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺    \e[0m${nc}"
     echo -e "\t\t  ${green}${WHITEBG}                             ${nc}\n\n"
     echo -e "\t\t${white}[1] ${BLUEBG}Check System Information${nc}\n"
     echo -e "\t\t${white}[2] ${BLUEBG}Check Network Connection${nc}\n"
