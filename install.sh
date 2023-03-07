@@ -24,6 +24,24 @@ LACKBG="$(printf '\033[40m')"
 RESETBG="$(printf '\e[0m')"
 #Sub Function in Main Function
 
+detect_os() 
+{
+  if [ -e /etc/lsb-release ]; then
+    # Ubuntu
+    #VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
+    #echo "This host is running on OS: Ubuntu Version: $VERSION"
+
+  elif [ -e /etc/redhat-release ]; then
+    # CentOS
+    #VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' )
+    #echo "This host is running on OS: CentOS Version: $VERSION"
+    yum install nc -y
+  else
+    #echo "Unknown operating system"
+  fi
+}
+
+
 function System_Info {
 
     clear
@@ -407,6 +425,7 @@ clear
 function Connection_Test {
     function CheckConncection {
         clear
+	detect_os
         echo -e "\n\t\t\t***Please Input Destination Port***"
         read -p "Select Port: " d_port
         target=$destination
