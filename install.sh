@@ -439,7 +439,7 @@ function Connection_Test {
         
     clear
     while true; do
-        echo -e "\t\t\t${MAGENTABG}${white}***Please Selelect Destination Host***${nc}\n\t\tSelect[1] = logrelay1.local\n\t\tSelect[2] = logrelay2.local\n\t\tSelect[3] = VPN Server (FirewallSIEM)\n\t\tSelect[4] = Return to Main menu\n"
+        echo -e "\t\t\t${MAGENTABG}${white}***Please Selelect Destination Host***${nc}\n\n\t\tSelect[1] = logrelay1.local\n\t\tSelect[2] = logrelay2.local\n\t\tSelect[3] = VPN Server (FirewallSIEM)\n\t\tSelect[4] = Return to Main menu\n"
         read -p "Select: " destination
         case $destination in
             [1])
@@ -804,9 +804,9 @@ function Terminate_SOC_Service {
 function menu {
     clear
     echo
-    echo -e "\t\t  ${green}${WHITEBG}                             ${nc}" 
-    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺    \e[0m${nc}"
-    echo -e "\t\t  ${green}${WHITEBG}                             ${nc}\n\n"
+    echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}" 
+    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺   \e[0m${nc}"
+    echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}\n\n"
     echo -e "\t\t${white}[1] ${BLUEBG}Check System Information${nc}\n"
     echo -e "\t\t${white}[2] ${BLUEBG}Check Network Connection${nc}\n"
     echo -e "\t\t${white}[3] ${BLUEBG}Installation Packages${nc}\n"
