@@ -527,11 +527,27 @@ function Install_Forti_SSL_VPN_Package {
         clear
         case $yn in
             [Yy]* )
-                echo "Installing PPP Package....."
-                apt install ppp expect -y
-                echo -e "\n\t****** PPP Expect was installed ******\n"
-                sleep 1.5
-                clear
+                if [ -e /etc/lsb-release ]; then
+                # Ubuntu
+                  VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
+                  echo "Installing PPP Package....."
+                  apt install ppp expect -y
+                  echo -e "\n\t****** PPP Expect was installed ******\n"
+                  sleep 1.5
+                  clear
+                elif [ -e /etc/redhat-release ]; then
+                # CentOS
+                  VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' )
+                  echo "Installing PPP Package....."
+                  yum install ppp expect -y
+                  echo -e "\n\t****** PPP Expect was installed ******\n"
+                  sleep 1.5
+                  clear
+                #echo "This host is running on OS: CentOS Version: $VERSION"
+                else
+                  echo "Unknown operating system"
+                  clear
+                fi
             break;;
             # if type no = exit
             [Nn]* )
@@ -545,18 +561,41 @@ function Install_Forti_SSL_VPN_Package {
         clear
         case $yn in
             [Yy]* )
-                echo "Installing Forti SSL-VPN Package....."
-                apt install ./VPN-CLIENT-TO-SITE/VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
-                echo -e "\n\t****** Forti SSL-VPN was installed ******"
-                soc_path="/home/socadmin"
-                mkdir $soc_path
-                sleep 1
-                clear
-                VPN_Config
-                cp ./VPN-CLIENT-TO-SITE/VPN_Script/*.sh $soc_path
-                echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
-                sleep 2
-                clear
+                if [ -e /etc/lsb-release ]; then
+                # Ubuntu
+                  VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
+                  echo "Installing Forti SSL-VPN Package....."
+                  apt install ./VPN-CLIENT-TO-SITE/VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
+                  echo -e "\n\t****** Forti SSL-VPN was installed ******"
+                  soc_path="/home/socadmin"
+                  mkdir $soc_path
+                  sleep 1
+                  clear
+                  VPN_Config
+                  cp ./VPN-CLIENT-TO-SITE/VPN_Script/*.sh $soc_path
+                  echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
+                  sleep 2
+                  clear
+                elif [ -e /etc/redhat-release ]; then
+                # CentOS
+                  VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' )
+                  echo "Installing Forti SSL-VPN Package....."
+                  yum install ./VPN-CLIENT-TO-SITE/VPN_Script/forticlient-sslvpn_4.4.2333-1_amd64.deb -y
+                  echo -e "\n\t****** Forti SSL-VPN was installed ******"
+                  soc_path="/home/socadmin"
+                  mkdir $soc_path
+                  sleep 1
+                  clear
+                  VPN_Config
+                  cp ./VPN-CLIENT-TO-SITE/VPN_Script/*.sh $soc_path
+                  echo -e "**Copy VPN Configuration to this path: $soc_path Complete!**\n"
+                  sleep 2
+                  clear
+                #echo "This host is running on OS: CentOS Version: $VERSION"
+                else
+                  echo "Unknown operating system"
+                  clear
+                fi
                 while true; do
                 #echo -e "\n"
                 read -p "Do you want to connect vpn y/n? " yn
@@ -588,6 +627,7 @@ function Install_Forti_SSL_VPN_Package {
     done
     
 }
+
 #Update
 function Install_NXLog_CE_Package {
     clear
@@ -696,24 +736,28 @@ function Install_NXLog_CE_Package {
                                 case $VERSION in
                                     [1] )
                                         echo "You Select 1.CentOS6"
+                                        yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-2.10.2150_rhel6.x86_64.rpm -y
                                         echo "nxlog-ce-2.10.2150_rhel6 was installed"
                                         sleep 1
                                     break;;
                                     [2] )
                                         echo "You Select 2.CentOS7"
+                                        yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel7.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel7 was installed"
                                         sleep 1
                                     break;;
                                     [3] )
                                         echo "You Select 3.CentOS8"
+                                        yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel8.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel8 was installed"
                                         sleep 1
                                     break;;
                                     [4]  )
                                         echo "You Select 4.CentOS9"
+                                        yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel9.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel9 was installed"
                                         sleep 1
