@@ -743,7 +743,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t*** You Select CentOS6 ***"
                                         sleep 1.5
                                         clear
-                                        yum update -y
+                                        #yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-2.10.2150_rhel6.x86_64.rpm -y
                                         echo "nxlog-ce-2.10.2150_rhel6 was installed"
                                         sleep 1.5
@@ -753,7 +753,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t*** You Select CentOS7 ***"
                                         sleep 1.5
                                         clear
-                                        yum update -y
+                                        #yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel7.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel7 was installed"
                                         sleep 1.5
@@ -763,7 +763,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t*** You Select CentOS8 ***"
                                         sleep 1.5
                                         clear
-                                        yum update -y
+                                        #yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel8.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel8 was installed"
                                         sleep 1.5
@@ -773,7 +773,7 @@ function Install_NXLog_CE_Package {
                                         echo -e "\n\t*** You Select CentOS9 ***"
                                         sleep 1.5
                                         clear
-                                        yum update -y
+                                        #yum update -y
                                         yum install ./VPN-CLIENT-TO-SITE/NXLOG-Agents/NXLog_CentOS_Agents/nxlog-ce-3.1.2319_rhel9.x86_64.rpm -y
                                         echo "nxlog-ce-3.1.2319_rhel9 was installed"
                                         sleep 1.5
