@@ -29,14 +29,17 @@ function detect_os {
     # Ubuntu
     VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
     #echo "This host is running on OS: Ubuntu Version: $VERSION"
+    clear
 
   elif [ -e /etc/redhat-release ]; then
     # CentOS
     VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' )
     #echo "This host is running on OS: CentOS Version: $VERSION"
     yum install nc -y
+    clear
   else
     echo "Unknown operating system"
+    clear
   fi
 }
 
@@ -476,6 +479,7 @@ function Connection_Test {
 
             [3])
                 clear
+                detect_os
                 target="203.154.171.173"
                 port="10443"
                 echo -e "Connection Testing to: Firewall SIEM"
@@ -488,7 +492,7 @@ function Connection_Test {
                 fi
                 #echo "Testing connection to $destination..."
                 echo -e "\n$status1\n"
-                ping -c 5 $target &> /dev/null && echo -e "Ping Connection to $target successful\n*** Connection To Firewall SIEM Success!!! ***" || echo "Ping Connection to $target failed\n*** Can't Connection To Firewall SIEM!!! ***"
+                ping -c 5 $target &> /dev/null && echo -e "Ping Connection to $target successful\n\n${GREENBG}*** Connection To Firewall SIEM Success!!!***${nc}" || echo "Ping Connection to $target failed\n*** Can't Connection To Firewall SIEM!!! ***"
                 echo -en "\n\n\t\t\tHit any key to continue"
                 read -n 1 line
             break;;
