@@ -6,7 +6,7 @@ read -p "Step #[1] - Enter the name of customer: " customer
 sleep 0.5
 clear
 echo -e "\n\t\t\t\t*** "$customer" 's Port Log Recieve ***\n"
-read -p "Step #[2] - Enter the log recieve port's "$customer" customer : " customer_port
+read -p "Step #[2] - Enter the log recieve port's "$customer" customer [Default = 514]: " customer_port
 sleep 0.5
 clear
 echo -e "\n\t\t\t\t*** "$customer" 's Hostname ***\n"
@@ -21,7 +21,7 @@ clear
 
 HostCount=${#Hostname[@]}
 #NXLOG File init
-customer_path="/home/syslog/"$customer"_"$customer_port""
+customer_path="/home/syslog/"
 #Main File init
 echo "" > nxlog.conf
 echo "#Filters Host" > /tmp/templatesoc1
@@ -35,6 +35,13 @@ echo "" > /tmp/templatesoc5
 echo "#NXLOG Config - "$customer" Customer" > nxlog.conf
 echo "
 #INPUT PORT
+<Input ""$customer"_"$customer_port"">
+    Module      im_udp
+    Host        0.0.0.0
+    Port        "$customer_port"
+    Exec        parse_syslog();
+</Input>
+
 <Input ""$customer"_"$customer_port"">
     Module      im_tcp
     Host        0.0.0.0
@@ -105,44 +112,63 @@ do
 
 while true; do
     echo -e "\n\t\t\t\t*** Please Select ERC for Send "$customer"'s Log ***\n"
-    echo -e "\n\t\t\t\t\t[1] ERC1 (10.11.100.129)\n\t\t\t\t\t[2] ERC2 (10.11.100.131)\n\t\t\t\t\t[3] ERC4 (10.11.100.132)\n\t\t\t\t\t[4] Enter IP manually\n\t\t\t\t\t[5] Quit"
+    echo -e "\n\t\t\t\t\t[1] LogRelay1 (10.11.100.225)\n\t\t\t\t\t[2] LogRelay2 (10.11.100.226)\n\t\t\t\t\t[3] ERC1 (10.11.100.129)\n\t\t\t\t\t[4] ERC2 (10.11.100.131)\n\t\t\t\t\t[5] Softnix (10.11.102.11)\n\t\t\t\t\t[6] Enter IP manually\n\t\t\t\t\t[7] Quit"
     read -p "Step #[5] --------------- Select ERC: " ERC
     case $ERC in
         [1])
             clear
-            echo -e "\t\t\tERC1 detected with IP address 10.11.100.129"
-            erc_ip=10.11.100.129
-            erc_name="ERC1"
+            erc_ip=logrelay1.local
+            erc_name="LogRelay1"
+            echo -e "\t\t\t$erc_name detected with IP address/Domain $erc_ip"
         break;;
 
        [2])
             clear
-            echo -e "\t\t\tERC2 detected with IP address 10.11.100.131"
-            erc_ip=10.11.100.131
-            erc_name="ERC2"
+            erc_ip=logrelay2.local
+            erc_name="LogRelay2"
+            echo -e "\t\t\t$erc_name detected with IP address/Domain $erc_ip"
+            
         break;;
  
        [3])
             clear
-            echo -e "\t\t\tERC4 detected with IP address 10.11.100.132"
-            erc_ip=10.11.100.132
-            erc_name="ERC4"
+            erc_ip=10.11.100.129
+            erc_name="ERC1"
+            echo -e "\t\t\t$erc_name detected with IP address $erc_ip"
+            
         break;;
 
-       [4])
+        [4])
+            clear
+            erc_ip=10.11.100.131
+            erc_name="ERC2"
+            echo -e "\t\t\t$erc_name detected with IP address $erc_ip"
+            
+        break;;
+
+        [5])
+            clear
+            erc_ip=10.11.102.11
+            erc_name="Softnix"
+            echo -e "\t\t\t$erc_name detected with IP address $erc_ip"
+
+        break;;
+
+       [6])
             clear
             read -p "Enter Name ERC: " erc_name
             read -p "Enter the IP address: " erc_ip
         break;;
+
       
-       [5])
+       [7])
             echo "Exiting the script..."
         break;;       
 
 
         *)
         clear
-        echo -e "\n\t\t***Please Confirm Your Selection type [1 - 5]***"
+        echo -e "\n\t\t***Please Confirm Your Selection type [1 - 7]***"
         sleep 2.2
         clear;;
             
@@ -168,7 +194,7 @@ done
     eval "current_erc_inputname=\$erc_inputname$x"
 
 echo "<Output "$current_erc_name"_"$customer"_"$current_erc_inputname">
-    Module  om_udp
+    Module  om_tcp
     Host    "$current_erc_ip"
     Port    "$current_erc_port"
 </Output>
@@ -202,8 +228,11 @@ clear
 
 
 mv ./nxlog.conf ./$customer-$customer_port.conf
-cp ./$customer-$customer_port.conf /etc/nxlog/customers
+
+rm -rf /etc/nxlog/nxlog.conf
+
+cp ./$customer-$customer_port.conf /etc/nxlog/nxlog.conf
 
 cat ./$customer-$customer_port.conf
 
-echo "Write Config and saved "$customer-$customer_port.conf" to /etc/nxlog/customers ....Done!!!"
+echo "Write Config and saved "$customer-$customer_port.conf" to /etc/nxlog/ ....Done!!!"

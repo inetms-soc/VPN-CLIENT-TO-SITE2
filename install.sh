@@ -12,7 +12,7 @@ cafe="\033[1;33m"
 fiuscha="\033[0;35m"
 blue="\033[34m"
 orange="\033[38;5;122m"
-
+# Color Code
 REDBG="$(printf '\033[41m')"
 GREENBG="$(printf '\033[42m')"
 ORANGEBG="$(printf '\033[43m')"
