@@ -25,10 +25,21 @@ customer_path="/home/syslog/"$customer"_"$customer_port""
 #Main File init
 echo "" > nxlog.conf
 echo "#Filters Host" > /tmp/templatesoc1
-echo "#Output Log Template" > /tmp/templatesoc2
-echo "#Route Archive" > /tmp/templatesoc3
-echo "#Input Log "$customer"" > /tmp/templatesoc4
-echo "" > /tmp/templatesoc5
+echo "
+#Output Log Template" > /tmp/templatesoc2
+
+echo "#Output Log Host Monitor Template" > /tmp/templatesoc3
+
+echo "#Route Archive" > /tmp/templatesoc4
+
+echo "#Route Filter Archive" > /tmp/templatesoc5
+
+echo "
+#Input Log "$customer"" > /tmp/templatesoc6
+
+echo "" > /tmp/templatesoc7
+
+echo "" > /tmp/templatesoc8
 
 # INPUT Log File - FUNCTION 01
 # Loop the specified number of times to get the hostname
@@ -42,6 +53,7 @@ echo "
     Exec        parse_syslog();
 </Input>
 " >> nxlog.conf
+
 for ((i=0; i<$HostCount; i++))
 do
 # Get the hostname of the machine
@@ -49,39 +61,36 @@ do
     eval "Hostname$((i+1))=$Hostname"
     eval "current_hostname=${Hostname[i]}"
 # Input Log - FUNCTION 4
-    echo "
-
-<Input "$customer"_""HOST"$((i+1))">
+    echo "<Input "$customer"_""HOST"$((i+1))">
     Module      im_file
     File        "\""$customer_path"/"$current_hostname"/*.log"\"
     SavePos     TRUE
     ReadFromLast TRUE
     PollInterval 1
     Exec        parse_syslog();
-</Input>" >> /tmp/templatesoc4
+</Input>
+" >> /tmp/templatesoc6
+
 # Filter Host - FUNCTION02
-    echo "
-#Filters Host$((i+1)) "\"$current_hostname\""
+    echo "#Filters Host$((i+1)) "\"$current_hostname\""
     <Processor filter_"$customer"_HOST"$((i+1))">
     Module      pm_filter
     Condition   \$raw_event =~ /"$current_hostname"/
-</Processor>" >> /tmp/templatesoc1
+</Processor>
+" >> /tmp/templatesoc1
 #Output Log Template - FUNCTION3
-
-    echo "
-
-<Output fileout_"$customer"_HOST"$((i+1))">
+    echo "<Output fileout_"$customer"_HOST"$((i+1))">
     CreateDir TRUE
     Module      om_file
     File        "\""$customer_path"\"" + "\"/\"" + "\""$current_hostname"\"" + "\"/\"" + "\""$current_hostname"\"" + "\"-\"" + strftime(now(), "\"%Y-%m-%d-%H\"") + "\".log\""
-</Output>">> /tmp/templatesoc2
+</Output>
+">> /tmp/templatesoc2
 
 #Route Archives - FUNCTION4
-echo "
-
-<Route "$customer">
+echo "<Route "$customer">
     Path       ""$customer"_"$customer_port"" => filter_"$customer"_HOST"$((i+1))" => fileout_"$customer"_HOST"$((i+1))"
-</Route>" >> /tmp/templatesoc3
+</Route>
+">> /tmp/templatesoc5
 
 route_host+=$(echo "$customer"_HOST"$((i+1))",)
 
@@ -89,6 +98,22 @@ done
 #Collect Route
 #clear
 #Output To SIEM - FUNCTION5
+
+
+# Add Monitoring Script 
+echo "<Output fileout_""$customer"_MonitorHost">
+    CreateDir TRUE
+    Module      om_file
+    File        "\""$customer_path"\"" + "\"/\"" + "\""MonitorHost"\"" + "\"/\"" + "\$HOSTNAME"
+</Output>
+" >> /tmp/templatesoc3
+
+
+echo "# Route MonitorHost Archives
+<Route ""$customer"_MonitorHost">
+    Path       ""$customer"_"$customer_port"" => fileout_"$customer"_MonitorHost""
+</Route>
+">> /tmp/templatesoc5
 
 
 #echo "#Output To SIEM"  >> nxlog.conf
@@ -105,7 +130,7 @@ do
 
 while true; do
     echo -e "\n\t\t\t\t*** Please Select ERC for Send "$customer"'s Log ***\n"
-    echo -e "\n\t\t\t\t\t[1] ERC1 (10.11.100.129)\n\t\t\t\t\t[2] ERC2 (10.11.100.131)\n\t\t\t\t\t[3] ERC4 (10.11.100.132)\n\t\t\t\t\t[4] Softnix (10.11.102.11)\n\t\t\t\t\t[5] Enter IP manually\n\t\t\t\t\t[6] Quit"
+    echo -e "\n\t\t\t\t\t[1] ERC1 (10.11.100.129)\n\t\t\t\t\t[2] ERC2 (10.11.100.131)\n\t\t\t\t\t[3] ERC14 (10.11.100.132)\n\t\t\t\t\t[4] Softnix (10.11.102.11)\n\t\t\t\t\t[5] Enter IP manually\n\t\t\t\t\t[6] Quit"
     read -p "Step #[5] --------------- Select ERC: " ERC
     case $ERC in
         [1])
@@ -124,9 +149,9 @@ while true; do
  
        [3])
             clear
-            echo -e "\t\t\tERC4 detected with IP address 10.11.100.132"
+            echo -e "\t\t\tERC14 detected with IP address 10.11.100.132"
             erc_ip=10.11.100.132
-            erc_name="ERC4"
+            erc_name="ERC14"
         break;;
 
         [4])
@@ -175,21 +200,23 @@ done
     eval "current_erc_port=\$erc_port$x"
     eval "current_erc_inputname=\$erc_inputname$x"
 
-echo "<Output "$current_erc_name"_"$customer"_"$current_erc_inputname">
+echo "#Output To $current_erc_name port $current_erc_port
+<Output "$current_erc_name"_"$customer"_"$current_erc_inputname">
     Module  om_udp
     Host    "$current_erc_ip"
     Port    "$current_erc_port"
 </Output>
-" >> /tmp/templatesoc5
+" >> /tmp/templatesoc7
 
 # Route To SIEM - FUNCTION 7
 route_host=$(echo "$route_host" | sed 's/,$//')
 #echo $route_host
-echo "#Route Log "$erc_inputname" to "$erc_name" port "$erc_port" " >> /tmp/templatesoc5
-echo "<Route forwardLog>
+#echo "#Route Log "$erc_inputname" to "$erc_name" port "$erc_port" " >> /tmp/templatesoc5
+echo "#Route Log "$erc_inputname" to "$erc_name" port "$erc_port"
+<Route forwardLog>
     Path      "$route_host"  => "$current_erc_name"_"$customer"_"$current_erc_inputname"
 </Route>    
-" >> /tmp/templatesoc5
+" >> /tmp/templatesoc8
 clear
 
 done
@@ -200,6 +227,9 @@ cat /tmp/templatesoc2 >> nxlog.conf
 cat /tmp/templatesoc3 >> nxlog.conf
 cat /tmp/templatesoc4 >> nxlog.conf
 cat /tmp/templatesoc5 >> nxlog.conf
+cat /tmp/templatesoc6 >> nxlog.conf
+cat /tmp/templatesoc7 >> nxlog.conf
+cat /tmp/templatesoc8 >> nxlog.conf
 
 
 ###
