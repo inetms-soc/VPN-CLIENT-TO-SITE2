@@ -227,7 +227,7 @@ LogLevel INFO
 function NXLog_Server_Config {
 echo -e "\n\t\t\t\t*** [ NXLog Server Configuration ] ***\n"
 while true; do
-    echo -e "\n\t\t\t***Please Selelect Log Relay's Host***\n\t\tSelect [1] = logrelay1.local(10.11.100.225)\n\t\tSelect [2] = logrelay2.local(10.11.100.226)\n\n\t\tSelect [3] = Enter Log Relay's IP Manually\n"
+    echo -e "\n\t\t\t***Please Selelect Log Relay's Host***\n\n\t\tSelect [1] = logrelay1.local(10.11.100.225)\n\t\tSelect [2] = logrelay2.local(10.11.100.226)\n\t\tSelect [3] = Enter Log Relay's IP Manually\n"
     read -p "     Select: " LogRelayIP
     case $LogRelayIP in
         [1])
@@ -646,7 +646,7 @@ function Install_NXLog_CE_Package {
                             sleep 1.5
                             clear
                             while true; do
-                                echo -e "\t\t\tWhich type of OS Version\n\t   Select [1] = Ubuntu16.04\n\t   Select [2] = Ubuntu18.04\n\t   Select [3] = Ubuntu20.04\n\t   Select [4] = Ubuntu22.04"
+                                echo -e "\t\t\tWhich type of OS Version\n\n\t   Select [1] = Ubuntu16.04\n\t   Select [2] = Ubuntu18.04\n\t   Select [3] = Ubuntu20.04\n\t   Select [4] = Ubuntu22.04"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
@@ -693,7 +693,7 @@ function Install_NXLog_CE_Package {
                             done
                             while true; do
                             #Ubuntu
-                                echo -e "\t\t2.2) Please Select Configuration\n\tSelect [1] = NXLog Server\n\tSelect [2] = NXLog Client"
+                                echo -e "\t\t2.2) Please Select Configuration\n\n\tSelect [1] = NXLog Server\n\tSelect [2] = NXLog Client"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
@@ -889,7 +889,7 @@ function menu {
     clear
     echo
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}" 
-    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺   \e[0m${nc}"
+    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺    \e[0m${nc}"
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}\n\n"
     echo -e "\t\t${white}[1] ${BLUEBG}Check System Information${nc}\n"
     echo -e "\t\t${white}[2] ${BLUEBG}Check Network Connection${nc}\n"
