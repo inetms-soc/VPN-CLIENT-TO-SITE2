@@ -439,7 +439,7 @@ echo "
 #crontab "${TEMP_FILE}"
 
 # Remove the temporary file
-rm "${TEMP_FILE}"
+#rm "${TEMP_FILE}"
 
 systemctl restart cron
 echo -e "Add Disk Monitoring Script Done...!\n"
