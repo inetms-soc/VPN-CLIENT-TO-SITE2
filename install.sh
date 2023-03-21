@@ -422,7 +422,30 @@ sleep 1.5
 clear
 }
 
+function addDiskMonitoring
+{
+clear
+# Copy Disk Monitor Script
+cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/diskmonitor.sh /home/socadmin
 
+TEMP_FILE=$(mktemp)
+echo "
+#Check Disk Capacity and send an alert to line SOC Group
+*/30 * * * * /home/socadmin/diskmonitor.sh
+">> "${TEMP_FILE}"
+#Old Path Crontab Log
+#/var/spool/cron/crontabs/root
+#Add Crontab
+crontab "${TEMP_FILE}"
+
+# Remove the temporary file
+rm "${TEMP_FILE}"
+
+systemctl restart cron
+echo -e "Add Disk Monitoring Script Done...!\n"
+sleep 1.5
+clear
+}
 
 function Connection_Test {
     function CheckConncection {
@@ -913,7 +936,8 @@ function install_menu {
         echo -e "\t\t3. Install LogRotate Config (Not Require any input just select for one time)"
         echo -e "\t\t4. Install Crontab Server Config   (Not Require any input just select for one time)"
         echo -e "\t\t5. Install Crontab Client Config   (Not Require any input just select for one time)"
-        echo -e "\t\t6. Exit to  Main Menu\n"
+        echo -e "\t\t6. Install Disk Monitoring Script  (Not Require any input just select for one time)"
+        echo -e "\t\t7. Exit to  Main Menu\n"
         echo -en "Enter an Option: "
         read -p "" option2
         clear
@@ -934,10 +958,13 @@ function install_menu {
                 addCrontab_Client
             break;;
             [6] )
+                addDiskMonitoring
+            break;;
+            [7] )
             break;;
             * )
             echo -e "\t\t**********************************************"
-            echo -e "\t\t***Please Confirm Your Selection type [1-5]***"
+            echo -e "\t\t***Please Confirm Your Selection type [1-6]***"
             echo -e "\t\t**********************************************"
             sleep 1.5
             clear;;
