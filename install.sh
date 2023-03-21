@@ -428,15 +428,15 @@ clear
 # Copy Disk Monitor Script
 cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/diskmonitor.sh /home/socadmin
 
-TEMP_FILE=$(mktemp)
+#TEMP_FILE=$(mktemp)
 echo "
 #Check Disk Capacity and send an alert to line SOC Group
 */30 * * * * /home/socadmin/diskmonitor.sh
-">> "${TEMP_FILE}"
+">> /var/spool/cron/crontabs/root
 #Old Path Crontab Log
 #/var/spool/cron/crontabs/root
 #Add Crontab
-crontab "${TEMP_FILE}"
+#crontab "${TEMP_FILE}"
 
 # Remove the temporary file
 rm "${TEMP_FILE}"
@@ -912,7 +912,7 @@ function menu {
     clear
     echo
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}" 
-    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺    \e[0m${nc}"
+    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺   \e[0m${nc}"
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}\n\n"
     echo -e "\t\t${white}[1] ${BLUEBG}Check System Information${nc}\n"
     echo -e "\t\t${white}[2] ${BLUEBG}Check Network Connection${nc}\n"
