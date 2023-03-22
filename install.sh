@@ -921,22 +921,50 @@ function Terminate_SOC_Service {
         read -p "Are you sure to uninstall SOC Service y/n? " yn
         case $yn in
             [Yy]* )
-                unset soc_path
-                echo -e "Disconnect VPN Connection\n"
-                pkill ppp
-                echo -e "Remove PPP Interface\n"
-                apt remove --purge ppp -y
-                echo -e "Remove Forticlient VPN Package\n"
-                apt remove --purge forticlient-sslvpn -y
-                echo -e "Stop NXLog Service\n"
-                systemctl stop nxlog -y
-                echo -e "Remove NXLog-CE Package\n"
-                apt remove --purge nxlog-ce -y
-                echo -e "Validate Installed Packages"
-                apt list --installed | grep -i nxlog
-                apt list --installed | grep -i forti
-                apt list --installed | grep -i ppp
-                echo -e "Terminate Service Done...!"
+                if [ -e /etc/lsb-release ]; then
+                # Ubuntu
+                    VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
+                    unset soc_path
+                    echo -e "Disconnect VPN Connection\n"
+                    pkill ppp
+                    echo -e "Remove PPP Interface\n"
+                    apt remove --purge ppp -y
+                    echo -e "Remove Forticlient VPN Package\n"
+                    apt remove --purge forticlient-sslvpn -y
+                    echo -e "Stop NXLog Service\n"
+                    systemctl stop nxlog -y
+                    echo -e "Remove NXLog-CE Package\n"
+                    apt remove --purge nxlog-ce -y
+                    echo -e "Validate Installed Packages"
+                    apt list --installed | grep -i nxlog
+                    apt list --installed | grep -i forti
+                    apt list --installed | grep -i ppp
+                    echo -e "Terminate Service Done...!"
+                    sleep 2
+                elif [ -e /etc/redhat-release ]; then
+                    # CentOS
+                    VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' )
+                    unset soc_path
+                    echo -e "Disconnect VPN Connection\n"
+                    pkill ppp
+                    echo -e "Remove PPP Interface\n"
+                    yum remove ppp -y
+                    echo -e "Remove Forticlient VPN Package\n"
+                    yum remove forticlient-sslvpn -y
+                    echo -e "Stop NXLog Service\n"
+                    systemctl stop nxlog
+                    echo -e "Remove NXLog-CE Package\n"
+                    yum remove nxlog-ce -y
+                    echo -e "Validate Installed Packages"
+                    yum list  | grep -i nxlog
+                    yum list  | grep -i forti
+                    yum list  | grep -i ppp
+                    echo -e "Terminate Service Done...!"
+                    sleep 2
+                else
+                    echo "Unknown operating system"
+                    clear
+                fi
             break;;
             # if type no = exit
             [Nn]* )
@@ -945,9 +973,6 @@ function Terminate_SOC_Service {
             echo "Please Confirm Your Selection type yes or no.";;
         esac
     done
-    #!/bin/bash
-    
-    
 }
 # Main Menu
 function menu {
