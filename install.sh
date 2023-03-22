@@ -758,7 +758,7 @@ function Install_NXLog_CE_Package {
                             #echo "You Select CentOS OS"
                             while true; do
                                 #echo -e "\t\t\tWhich type of OS Version\n\t   Select [1] = Ubuntu16.04\n\t   Select [2] = Ubuntu18.04\n\t   Select [3] = Ubuntu20.04\n\t   Select [4] = Ubuntu22.04"
-                                echo -e "\t\t\tWhich type of OS Version\n\t   Select [1] = CentOS6\n\t   Select [2] = CentOS7\n\t   Select [3] = CentOS8\n\t   Select [4] = CentOS9"
+                                echo -e "\t\t\tWhich type of OS Version\n\n\t   Select [1] = CentOS6\n\t   Select [2] = CentOS7\n\t   Select [3] = CentOS8\n\t   Select [4] = CentOS9"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
@@ -912,7 +912,7 @@ function menu {
     clear
     echo
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}" 
-    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺   \e[0m${nc}"
+    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺    \e[0m${nc}"
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}\n\n"
     echo -e "\t\t${white}[1] ${BLUEBG}Check System Information${nc}\n"
     echo -e "\t\t${white}[2] ${BLUEBG}Check Network Connection${nc}\n"
