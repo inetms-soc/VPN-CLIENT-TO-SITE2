@@ -661,7 +661,7 @@ function Install_NXLog_CE_Package {
         case $yn in
             [Yy]* )
                 while true; do
-                    echo -e "\n\t\t\t***Which type of your Operating System***\n\tSelect [1] = Ubuntu\n\tSelect [2] = CentOS\n"
+                    echo -e "\n\t\t\t***Which type of your Operating System***\n\n\tSelect [1] = Ubuntu\n\tSelect [2] = CentOS\n"
                     read -p "Select: " OS
                     case $OS in
                         [1] )
@@ -912,7 +912,7 @@ function menu {
     clear
     echo
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}" 
-    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺    \e[0m${nc}"
+    echo -e "\t\t  ${WHITEBG}   \e[1;32m 🍺 SOC Installation Menu 🍺     \e[0m${nc}"
     echo -e "\t\t  ${green}${WHITEBG}                                  ${nc}\n\n"
     echo -e "\t\t${white}[1] ${BLUEBG}Check System Information${nc}\n"
     echo -e "\t\t${white}[2] ${BLUEBG}Check Network Connection${nc}\n"
