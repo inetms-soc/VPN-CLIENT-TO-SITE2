@@ -883,6 +883,9 @@ function Install_NXLog_CE_Package {
 }
 function Check_Installed_Package {
     clear
+if [ -e /etc/lsb-release ]; then
+    # Ubuntu
+    VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
     echo -e "\nValidate Installed Packages...\n"
     echo -e "\nValidate NXLog Packages...\n"
     apt list --installed | grep -i nxlog
@@ -892,6 +895,24 @@ function Check_Installed_Package {
     apt list --installed | grep -i ppp
     echo -e "\nHit any key to continue\n"
     read -n 1 line
+
+elif [ -e /etc/redhat-release ]; then
+    # CentOS
+    VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' )
+    echo -e "\nValidate Installed Packages...\n"
+    echo -e "\nValidate NXLog Packages...\n"
+    yum list | grep -i nxlog
+    echo -e "\nValidate FortiClient Packages...\n"
+    yum list | grep -i forti
+    echo -e "\nValidate PPP Packages...\n"
+    yum list | grep -i ppp
+    echo -e "\nHit any key to continue\n"
+    read -n 1 line
+else
+    echo "Unknown operating system"
+    clear
+fi
+
 }
 function Terminate_SOC_Service {
     clear
