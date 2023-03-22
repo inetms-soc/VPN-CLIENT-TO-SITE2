@@ -661,7 +661,7 @@ function Install_NXLog_CE_Package {
         case $yn in
             [Yy]* )
                 while true; do
-                    echo -e "\n\t\t\t***Which type of your Operating System***\n\n\tSelect [1] = Ubuntu\n\tSelect [2] = CentOS\n"
+                    echo -e "\n\t\t\t${BLUEBG}***Which type of your Operating System***${nc}\n\n\tSelect [1] = Ubuntu\n\tSelect [2] = CentOS\n"
                     read -p "Select: " OS
                     case $OS in
                         [1] )
@@ -669,7 +669,7 @@ function Install_NXLog_CE_Package {
                             sleep 1.5
                             clear
                             while true; do
-                                echo -e "\t\t\tWhich type of OS Version\n\n\t   Select [1] = Ubuntu16.04\n\t   Select [2] = Ubuntu18.04\n\t   Select [3] = Ubuntu20.04\n\t   Select [4] = Ubuntu22.04"
+                                echo -e "\t\t\t${BLUEBG}Which type of OS Version${nc}\n\n\t   Select [1] = Ubuntu16.04\n\t   Select [2] = Ubuntu18.04\n\t   Select [3] = Ubuntu20.04\n\t   Select [4] = Ubuntu22.04"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
@@ -758,7 +758,7 @@ function Install_NXLog_CE_Package {
                             #echo "You Select CentOS OS"
                             while true; do
                                 #echo -e "\t\t\tWhich type of OS Version\n\t   Select [1] = Ubuntu16.04\n\t   Select [2] = Ubuntu18.04\n\t   Select [3] = Ubuntu20.04\n\t   Select [4] = Ubuntu22.04"
-                                echo -e "\t\t\tWhich type of OS Version\n\n\t   Select [1] = CentOS6\n\t   Select [2] = CentOS7\n\t   Select [3] = CentOS8\n\t   Select [4] = CentOS9"
+                                echo -e "\t\t\t${BLUEBG}Which type of OS Version${nc}\n\n\t   Select [1] = CentOS6\n\t   Select [2] = CentOS7\n\t   Select [3] = CentOS8\n\t   Select [4] = CentOS9"
                                 read -p "Select: " VERSION
                                 case $VERSION in
                                     [1] )
