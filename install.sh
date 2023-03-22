@@ -399,21 +399,21 @@ function addCrontab_Client
 {
 clear
 # Create a temporary file to store the new crontab entry
-TEMP_FILE=$(mktemp)
+#TEMP_FILE=$(mktemp)
 
 echo "
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
-" > "${TEMP_FILE}"
+" >> /var/spool/cron/root
 
 #Old Crontab Path
 #/var/spool/cron/crontabs/root
 
 # Load the new crontab entry into the user's crontab
-crontab "${TEMP_FILE}"
+#crontab "${TEMP_FILE}"
 
 # Remove the temporary file
-rm "${TEMP_FILE}"
+#rm "${TEMP_FILE}"
 
 if [ -e /etc/lsb-release ]; then
     # Ubuntu
