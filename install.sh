@@ -415,7 +415,28 @@ crontab "${TEMP_FILE}"
 # Remove the temporary file
 rm "${TEMP_FILE}"
 
-systemctl restart cron
+if [ -e /etc/lsb-release ]; then
+    # Ubuntu
+    VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
+    #echo "This host is running on OS: Ubuntu Version: $VERSION"
+    # Cron for Ubuntu
+    systemctl restart cron
+    #clear
+
+elif [ -e /etc/redhat-release ]; then
+    # CentOS
+    VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' )
+    #echo "This host is running on OS: CentOS Version: $VERSION"
+    #yum install nc -y
+    #clear
+    # Crond for Centos
+    systemctl restart crond
+else
+    echo "Unknown operating system"
+    clear
+fi
+
+
 echo -e "Install Crontab Log Client Complete....!\n"
 
 sleep 1.5
