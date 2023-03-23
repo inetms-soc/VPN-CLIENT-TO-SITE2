@@ -322,7 +322,7 @@ LogLevel INFO
 #       Forward LOG Relay              #
 ########################################
 <Output LogRelay1>
-    Module  om_tcp
+    Module  om_udp
     Host    '$LogRelayIP'
     Port    '$LogRelayPort'
     Exec    parse_syslog();

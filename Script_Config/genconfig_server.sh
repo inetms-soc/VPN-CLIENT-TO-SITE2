@@ -46,11 +46,30 @@ echo "" > /tmp/templatesoc8
 echo "#NXLOG Config - "$customer" Customer" > nxlog.conf
 echo "
 #INPUT PORT
-<Input ""$customer"_"$customer_port"">
+<Input ""$customer"_"$customer_port"_UDP">
+    Module      im_udp
+    Host        0.0.0.0
+    Port        "$customer_port"
+    Exec        parse_syslog();
+</Input>
+
+<Input ""$customer"_"$customer_port"_UDP2">
+    Module      im_udp
+    Host        0.0.0.0
+    Port        "$customer_port"
+</Input>
+
+<Input ""$customer"_"$customer_port"_TCP">
     Module      im_tcp
     Host        0.0.0.0
     Port        "$customer_port"
     Exec        parse_syslog();
+</Input>
+
+<Input ""$customer"_"$customer_port"_TCP2">
+    Module      im_tcp
+    Host        0.0.0.0
+    Port        "$customer_port"
 </Input>
 " >> nxlog.conf
 
@@ -88,7 +107,7 @@ do
 
 #Route Archives - FUNCTION4
 echo "<Route "$customer">
-    Path       ""$customer"_"$customer_port"" => filter_"$customer"_HOST"$((i+1))" => fileout_"$customer"_HOST"$((i+1))"
+    Path       ""$customer"_"$customer_port"_UDP",""$customer"_"$customer_port"_UDP2",""$customer"_"$customer_port"_TCP",""$customer"_"$customer_port"_TCP2" => filter_"$customer"_HOST"$((i+1))" => fileout_"$customer"_HOST"$((i+1))"
 </Route>
 ">> /tmp/templatesoc5
 
@@ -101,19 +120,19 @@ done
 
 
 # Add Monitoring Script 
-echo "<Output fileout_""$customer"_MonitorHost">
-    CreateDir TRUE
-    Module      om_file
-    File        "\""$customer_path"\"" + "\"/\"" + "\""MonitorHost"\"" + "\"/\"" + "\$HOSTNAME"
-</Output>
-" >> /tmp/templatesoc3
+#echo "<Output fileout_""$customer"_MonitorHost">
+#    CreateDir TRUE
+#    Module      om_file
+#    File        "\""$customer_path"\"" + "\"/\"" + "\""MonitorHost"\"" + "\"/\"" + "\$HOSTNAME"
+#</Output>
+#" >> /tmp/templatesoc3
 
 
-echo "# Route MonitorHost Archives
-<Route ""$customer"_MonitorHost">
-    Path       ""$customer"_"$customer_port"" => fileout_"$customer"_MonitorHost""
-</Route>
-">> /tmp/templatesoc5
+#echo "# Route MonitorHost Archives
+#<Route ""$customer"_MonitorHost">
+#    Path       ""$customer"_"$customer_port"" => fileout_"$customer"_MonitorHost""
+#</Route>
+#">> /tmp/templatesoc5
 
 
 #echo "#Output To SIEM"  >> nxlog.conf
@@ -130,7 +149,7 @@ do
 
 while true; do
     echo -e "\n\t\t\t\t*** Please Select ERC for Send "$customer"'s Log ***\n"
-    echo -e "\n\t\t\t\t\t[1] ERC1 (10.11.100.129)\n\t\t\t\t\t[2] ERC2 (10.11.100.131)\n\t\t\t\t\t[3] ERC14 (10.11.100.132)\n\t\t\t\t\t[4] Softnix (10.11.102.11)\n\t\t\t\t\t[5] Enter IP manually\n\t\t\t\t\t[6] Quit"
+    echo -e "\n\t\t\t\t\t[1] ERC1 (10.11.100.129)\n\t\t\t\t\t[2] ERC2 (10.11.100.131)\n\t\t\t\t\t[3] ERC14 (10.11.100.132)\n\t\t\t\t\t[4] ERC16 (10.11.100.133)\n\t\t\t\t\t[5] Softnix (10.11.102.11)\n\t\t\t\t\t[6] Enter IP manually\n\t\t\t\t\t[7] Quit"
     read -p "Step #[5] --------------- Select ERC: " ERC
     case $ERC in
         [1])
@@ -154,21 +173,28 @@ while true; do
             erc_name="ERC14"
         break;;
 
-        [4])
+       [4])
+            clear
+            echo -e "\t\t\tERC16 detected with IP address 10.11.100.133"
+            erc_ip=10.11.100.133
+            erc_name="ERC16"
+        break;;
+
+        [5])
             clear
             echo -e "\t\t\tSoftnix detected with IP address 10.11.102.11"
             erc_ip=10.11.102.11
             erc_name="Softnix"
         break;;
 
-       [5])
+       [6])
             clear
             read -p "Enter Name ERC: " erc_name
             read -p "Enter the IP address: " erc_ip
         break;;
 
       
-       [6])
+       [7])
             echo "Exiting the script..."
         break;;       
 
