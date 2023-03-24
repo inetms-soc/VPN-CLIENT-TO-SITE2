@@ -5,7 +5,7 @@ THRESHOLD=90
 # Get private IP address
 PRIV_IP=$(hostname -I | awk '{print $1}')
 # Get the current disk usage percentage
-DISK_USAGE=$(df -h / | awk 'NR==2{print $5}' | cut -d'%' -f1)
+DISK_USAGE=$(df -h /var | awk 'NR==2{print $5}' | cut -d'%' -f1)
 
 # Check if the disk usage exceeds the threshold
 if [ $DISK_USAGE -gt $THRESHOLD ]; then
