@@ -92,7 +92,7 @@ do
 
 # Filter Host - FUNCTION02
     echo "#Filters Host$((i+1)) "\"$current_hostname\""
-    <Processor filter_"$customer"_HOST"$((i+1))">
+<Processor filter_"$customer"_HOST"$((i+1))">
     Module      pm_filter
     Condition   \$raw_event =~ /"$current_hostname"/
 </Processor>
