@@ -401,11 +401,6 @@ clear
 # Create a temporary file to store the new crontab entry
 #TEMP_FILE=$(mktemp)
 
-echo "
-#Check Status NXLog Agent
-*/15 * * * * /home/socadmin/nxlog_monitor.sh
-" >> /var/spool/cron/root
-
 #Old Crontab Path
 #/var/spool/cron/crontabs/root
 
@@ -420,6 +415,10 @@ if [ -e /etc/lsb-release ]; then
     VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
     #echo "This host is running on OS: Ubuntu Version: $VERSION"
     # Cron for Ubuntu
+    echo "
+    #Check Status NXLog Agent
+    */15 * * * * /home/socadmin/nxlog_monitor.sh
+    " >> /var/spool/cron/crontabs/root
     systemctl restart cron
     #clear
 
@@ -430,6 +429,10 @@ elif [ -e /etc/redhat-release ]; then
     #yum install nc -y
     #clear
     # Crond for Centos
+    echo "
+    #Check Status NXLog Agent
+    */15 * * * * /home/socadmin/nxlog_monitor.sh
+    " >> /var/spool/cron/root
     systemctl restart crond
 else
     echo "Unknown operating system"
