@@ -431,10 +431,12 @@ elif [ -e /etc/redhat-release ]; then
     #yum install nc -y
     #clear
     # Crond for Centos
+    mkdir /home/socadmin
     echo "
-    #Check Status NXLog Agent
-    */15 * * * * /home/socadmin/nxlog_monitor.sh
-    " >> /var/spool/cron/root
+#Check Status NXLog Agent
+*/15 * * * * /home/socadmin/nxlog_monitor.sh
+" >> /var/spool/cron/root
+    cp ./VPN-CLIENT-TO-SITE/VPN_Script/nxlog_monitor.sh /home/socadmin
     systemctl restart crond
 else
     echo "Unknown operating system"
