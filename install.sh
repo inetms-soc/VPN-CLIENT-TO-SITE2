@@ -415,10 +415,12 @@ if [ -e /etc/lsb-release ]; then
     VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
     #echo "This host is running on OS: Ubuntu Version: $VERSION"
     # Cron for Ubuntu
+    mkdir /home/socadmin
     echo "
-    #Check Status NXLog Agent
-    */15 * * * * /home/socadmin/nxlog_monitor.sh
-    " >> /var/spool/cron/crontabs/root
+#Check Status NXLog Agent
+*/15 * * * * /home/socadmin/nxlog_monitor.sh
+" >> /var/spool/cron/crontabs/root
+    cp ./VPN-CLIENT-TO-SITE/VPN_Script/nxlog_monitor.sh /home/socadmin
     systemctl restart cron
     #clear
 
