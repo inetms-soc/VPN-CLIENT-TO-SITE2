@@ -6,7 +6,7 @@ THRESHOLD=90
 PRIV_IP=$(hostname -I | awk '{print $1}')
 # Get the current disk usage percentage
 DISK_USAGE=$(df -h /var | awk 'NR==2{print $5}' | cut -d'%' -f1)
-
+#lastest add token = THAISINTO
 # Check if the disk usage exceeds the threshold
 if [ $DISK_USAGE -gt $THRESHOLD ]; then
     # If it does, send a notification to Line Alert
