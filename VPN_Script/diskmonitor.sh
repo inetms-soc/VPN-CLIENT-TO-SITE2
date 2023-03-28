@@ -12,6 +12,6 @@ if [ $DISK_USAGE -gt $THRESHOLD ]; then
     # If it does, send a notification to Line Alert
     MESSAGE="Disk usage on path /var *$(hostname)* IP: *$PRIV_IP*  is currently at *$DISK_USAGE%*"
     echo $MESSAGE
-    curl -X POST -H 'Authorization: Bearer GObzu9pBhWRakPDkdccv9x3Uf2YhLkEJ1LYV5OFskkZ' -F "message=$MESSAGE" https://notify-api.line.me/api/notify
+    curl -X POST -H 'Authorization: Bearer vlPeGyDqiLNusMc8SChgLQLiy3QlZK35BGyPshx3ghm' -F "message=$MESSAGE" https://notify-api.line.me/api/notify
 fi
 
