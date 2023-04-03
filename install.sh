@@ -374,7 +374,7 @@ TEMP_FILE=$(mktemp)
 echo "
 #Rotate and Zip Log Files Every midnight
 0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.conf
-#Set Log Retention to 90 Days
+#Set Log Retention to 90
 30 0 * * * /usr/bin/find /home/syslog/*/ -name '*.gz' -mtime +90 –exec rm {} \;
 #Check Status VPN Connection
 */10 * * * * /home/socadmin/autoconnect.sh
