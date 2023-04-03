@@ -357,7 +357,8 @@ clear
 function addCrontab_Server
 {
 clear
-
+mkdir -p /home/socadmin
+cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/diskmonitor.sh /home/socadmin
 # Create a temporary file to store the new crontab entry
 TEMP_FILE=$(mktemp)
 
