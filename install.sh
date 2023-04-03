@@ -227,22 +227,22 @@ LogLevel INFO
 function NXLog_Server_Config {
 echo -e "\n\t\t\t\t*** [ NXLog Server Configuration ] ***\n"
 while true; do
-    echo -e "\n\t\t\t***Please Selelect Log Relay's Host***\n\n\t\tSelect [1] = logrelay1.local(10.11.100.225)\n\t\tSelect [2] = logrelay2.local(10.11.100.226)\n\t\tSelect [3] = Enter Log Relay's IP Manually\n"
+    echo -e "\n\t\t\t***Please Selelect ERC's Host***\n\n\t\tSelect [1] = ERC11(203.151.6.81)\n\t\tSelect [2] = ERC12(203.151.6.82)\n\t\tSelect [3] = Enter ERC 's IP Manually\n"
     read -p "     Select: " LogRelayIP
     case $LogRelayIP in
         [1])
             clear
-            LogRelayIP="logrelay1.local" 
+            LogRelayIP="203.151.6.81" 
         break;;
 
         [2])
             clear
-            LogRelayIP="logrelay2.local" 
+            LogRelayIP="203.151.6.82" 
         break;;
 
         [3])
             clear
-            read -p "Enter Log Relay's IP or Domain Name: " LogRelayIP
+            read -p "Enter ERC's IP or Domain Name: " LogRelayIP
         break;;
 
         *)
@@ -259,9 +259,6 @@ read -p "Please input Destination Log Relay's Port: " LogRelayPort
 echo '########################################
 # Global directives                    #
 ########################################
-#User nxlog
-#Group nxlog
-
 LogFile /var/log/nxlog/nxlog.log
 LogLevel INFO
 
@@ -283,17 +280,10 @@ LogLevel INFO
     Exec	parse_syslog();
 </Input>
 
-<Input in2>
-    Module	im_tcp
-    Host	0.0.0.0
-    Port	514
-    Exec	parse_syslog();
-</Input>
-
 <Output fileout1>
     CreateDir TRUE
     Module	om_file
-    File	"/home/syslog/" + $MessageSourceAddress + "-" + $HOSTNAME + "/" + $MessageSourceAddress + "-" + strftime(now(), "%Y-%m-%d-%H") + ".log"
+    File	"/home/syslog/" + $MessageSourceAddress + "/" + $MessageSourceAddress + "-" + strftime(now(), "%Y-%m-%d-%H") + ".log"
 </Output>
 
 
@@ -301,7 +291,7 @@ LogLevel INFO
 # Routes Archives Log                  #
 ########################################
 <Route 1>
-    Path	in1,in2 => fileout1
+    Path	in1 => fileout1
 </Route>
 
 
@@ -319,9 +309,9 @@ LogLevel INFO
 
 
 ########################################
-#       Forward LOG Relay              #
+# Forward LOG-SIEM                     #
 ########################################
-<Output LogRelay1>
+<Output SIEM>
     Module  om_udp
     Host    '$LogRelayIP'
     Port    '$LogRelayPort'
@@ -329,10 +319,10 @@ LogLevel INFO
 </Output>
 
 ########################################
-# Routes Forward LogRelay              #
+# Routes Forward LOG-SIEM              #
 ########################################
 <Route forwardLog1>
-   Path        Host1 => LogRelay1
+   Path        Host1 => SIEM
 </Route>
 
 ' > ./VPN-CLIENT-TO-SITE/NXLog_Config/nxlog_server.conf
@@ -376,8 +366,6 @@ echo "
 0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.conf
 #Set Log Retention to 90
 30 0 * * * /usr/bin/find /home/syslog/*/ -name '*.gz' -mtime +90 –exec rm {} \;
-#Check Status VPN Connection
-*/10 * * * * /home/socadmin/autoconnect.sh
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
 " > "${TEMP_FILE}"
