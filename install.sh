@@ -458,8 +458,7 @@ clear
 mkdir -p /home/socadmin
 cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/diskmonitor.sh /home/socadmin
 #TEMP_FILE=$(mktemp)
-echo "
-#Check Disk Capacity and send an alert to line SOC Group
+echo "#Check Disk Capacity and send an alert to line SOC Group
 */30 * * * * /home/socadmin/diskmonitor.sh
 ">> /var/spool/cron/crontabs/root
 #Old Path Crontab Log
