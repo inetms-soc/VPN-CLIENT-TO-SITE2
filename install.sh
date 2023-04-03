@@ -367,14 +367,15 @@ clear
 function addCrontab_Server
 {
 clear
+
 # Create a temporary file to store the new crontab entry
 TEMP_FILE=$(mktemp)
 
 echo "
 #Rotate and Zip Log Files Every midnight
 0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.conf
-#Find log file 7 days and delete log
-30 0 * * * /usr/bin/find /home/syslog/*/ -name '*.gz' -mtime +7 –exec rm {} \;
+#Find log file 90 days and delete log
+30 0 * * * /usr/bin/find /home/syslog/*/ -name '*.gz' -mtime +90 –exec rm {} \;
 #Check Status VPN Connection
 */10 * * * * /home/socadmin/autoconnect.sh
 #Check Status NXLog Agent
@@ -415,7 +416,7 @@ if [ -e /etc/lsb-release ]; then
     VERSION=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE" | cut -d "=" -f 2)
     #echo "This host is running on OS: Ubuntu Version: $VERSION"
     # Cron for Ubuntu
-    mkdir /home/socadmin
+    mkdir -p /home/socadmin
     echo "
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
@@ -431,7 +432,7 @@ elif [ -e /etc/redhat-release ]; then
     #yum install nc -y
     #clear
     # Crond for Centos
-    mkdir /home/socadmin
+    mkdir -p /home/socadmin
     echo "
 #Check Status NXLog Agent
 */15 * * * * /home/socadmin/nxlog_monitor.sh
@@ -454,8 +455,8 @@ function addDiskMonitoring
 {
 clear
 # Copy Disk Monitor Script
+mkdir -p /home/socadmin
 cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/diskmonitor.sh /home/socadmin
-
 #TEMP_FILE=$(mktemp)
 echo "
 #Check Disk Capacity and send an alert to line SOC Group
