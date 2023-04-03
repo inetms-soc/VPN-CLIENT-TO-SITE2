@@ -362,8 +362,7 @@ cp -a ./VPN-CLIENT-TO-SITE/VPN_Script/diskmonitor.sh /home/socadmin
 # Create a temporary file to store the new crontab entry
 TEMP_FILE=$(mktemp)
 
-echo "
-#Rotate and Zip Log Files Every midnight
+echo "#Rotate and Zip Log Files Every midnight
 0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.conf
 #Set Log Retention to 90
 30 0 * * * /usr/bin/find /home/syslog/*/ -name '*.gz' -mtime +90 –exec rm {} \;
